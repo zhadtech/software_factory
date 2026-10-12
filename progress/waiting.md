@@ -1,20 +1,16 @@
 # Waiting on Zhad
 
-1. Should the 11 proposed rules go to trial in fog_of_war? They replace the 11 rules that name
-   PLAN.md or PROGRESS.md, so the template can use the state card, the step queue and the small
-   progress files. Recommended: yes, all 11. Blocks: question 2.
-2. May an agent install sdlc-core and the template into fog_of_war, on a new branch in that repo,
-   after the `process/lean-boot` work there merges? That session already did most of the audit's
-   day-one changes, so the install adds only the config, the progress files and quiet verify.
-   Recommended: yes. Blocks: finishing phase 1.
-3. Create the private GitHub repo `zhadtech/software_factory` and push `phase-1` as `main`?
-   Recommended: yes. Blocks: installing the plugin from GitHub, branch protection, pull requests.
-4. Turn on branch protection for `main`, so only Zhad merges? Recommended: yes, right after the
-   first push. Blocks: "agents propose, Zhad merges" is only a written rule until then.
-5. Archive `zhadtech/agi-standards` and `zhadtech/list-agents` on GitHub, so they are read-only?
-   Recommended: yes, after question 3. Blocks: nothing yet.
-6. What is the monthly ceiling for eval spending? Recommended: start small, about the cost of one
+1. Turn on branch protection for `main`, so only Zhad merges? Recommended: yes. Blocks: "agents
+   propose, Zhad merges" is only a written rule until then.
+2. Archive `zhadtech/agi-standards` and `zhadtech/list-agents` on GitHub, so they are read-only?
+   Recommended: yes. Blocks: nothing yet.
+3. What is the monthly ceiling for eval spending? Recommended: start small, about the cost of one
    long session, and raise it with evidence. Blocks: phase 2 evals.
-7. Add a `supersedes` row to the registry field table in `CHARTER.md`? Only Zhad edits the charter.
-   Recommended: yes, with the meaning "the rules this one replaces once it moves to trial or
-   active". Blocks: nothing; the field already works.
+4. Add a `supersedes` row to the registry field table in `CHARTER.md`? Only Zhad edits the charter.
+   Recommended: yes, meaning "the rules this one replaces once it moves to trial or active".
+   Blocks: nothing; the field already works.
+5. The charter lets agents open version-bump pull requests in projects, and phase 4 plans a routine
+   for it. That conflicts with "the factory never changes another project". Should projects pull
+   updates themselves instead? Recommended: yes. Plugins update through Claude Code's plugin
+   auto-update when their version changes, and a project refreshes its rules block by running a
+   factory script from inside the project. Remove that charter row. Blocks: phase 4.

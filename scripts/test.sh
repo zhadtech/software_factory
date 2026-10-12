@@ -13,9 +13,7 @@ run() { # run <name> <command...>
 $(printf '%s\n' "$out" | tail -20)"
 }
 
-rule_files=(seeds/agi-standards/AGENTS.md)
-[ -f ../fog_of_war/AGENTS.md ] && rule_files+=(../fog_of_war/AGENTS.md)
-run "registry" ruby scripts/check-registry.rb "${rule_files[@]}"
+run "registry" ruby scripts/check-registry.rb
 run "AGENTS.md template is generated from the registry" ruby scripts/build-agents-md.rb --check
 run "sdlc-core hooks" bash plugins/sdlc-core/tests/run.sh
 run "template budget.sh matches sdlc-budget" cmp plugins/sdlc-core/bin/sdlc-budget templates/project/scripts/budget.sh

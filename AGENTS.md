@@ -9,6 +9,8 @@ Rules for any agent changing this repo. Read once at session start, then read
 |---|---|---|
 | `progress/now.md` | Next action and phase status | Session start; rewrite it before you stop |
 | `progress/waiting.md` | Questions for Zhad, each with a recommended answer and what it blocks | Asking or recording an answer |
+| `progress/decisions.md` | One line per decision Zhad made, dated | Before reopening a settled question |
+| `recommendations/` | Advice for one project, which that project may adopt | Writing down what a project could take from the factory |
 | `CHARTER.md` | Decision rights, the seven starting decisions, registry fields, rule lifecycle | Before you propose a rule or a status change |
 | `registry/rules.yaml` | Every rule, active or not | Changing or citing a rule. Read one entry, not the file |
 | `registry/pool.md` | 145 candidate tips (P1 to P145) | Promoting a tip. Read line ranges only |
@@ -40,6 +42,8 @@ what it blocks (`R-COMMS-001`).
 plugin change only when the version changes. `scripts/test.sh` checks this against `main`.
 **F10.** `templates/project/scripts/budget.sh` is a copy of `plugins/sdlc-core/bin/sdlc-budget`. Change
 the plugin file, then copy it over.
+**F11.** Never change another project's files, fog_of_war included. The factory publishes plugins
+and templates; projects adopt them. Advice for one project goes in `recommendations/<project>.md`.
 
 ## Commands
 

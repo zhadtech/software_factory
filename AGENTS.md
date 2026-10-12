@@ -25,9 +25,10 @@ Rules for any agent changing this repo. Read once at session start, then read
 
 ## Rules
 
-**F1.** Work on a branch. Never commit to `main`. Never push, open a pull request, archive a repo
-or change GitHub settings without Zhad's yes for that one action. `.claude/hooks/guard-main.sh`
-blocks agent pushes to `main`, force pushes and merges; it stands in for GitHub branch protection.
+**F1.** Work on a branch. Never commit to `main`. Push work branches and open draft pull requests
+without asking (Zhad, 2026-10-13); Zhad merges. Never push to `main`, merge, archive a repo or
+change GitHub settings without Zhad's yes for that one action. `.claude/hooks/guard-main.sh` blocks
+agent pushes to `main`, force pushes and merges; it stands in for GitHub branch protection.
 **F2.** Never edit `CHARTER.md`. Never set a rule's status to trial, active, deprecated or retired.
 Propose the change; Zhad decides.
 **F3.** Every new or changed rule cites at least one source: a pool tip, an official doc URL, or a

@@ -1,5 +1,5 @@
 {
-  "director": "Zhad",
+  "director": "the director",
   "trim_lines": 120,
   "handoff_agents": ["product", "architect", "builder", "reviewer", "release"],
   "heavy_files": [

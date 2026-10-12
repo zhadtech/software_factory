@@ -2,6 +2,8 @@
 
 Operating rules for any agent working in this repo. Read once, at session start. The state card
 that the sdlc-core hook adds at the top of the session says where things stand; act from it.
+The director is the person who runs this project and approves the agents' work; their name is
+`director` in `.claude/sdlc.json`.
 
 ## Files
 
@@ -92,7 +94,7 @@ Cite rules by ID in review ("violates R-CTX-002"). Change them in the factory re
 
 ### Writing for the director
 
-**R-COMMS-001.** Anything Zhad reads — a question, a walk card, a step to perform — is written in full, plain sentences: no shorthand, tags or IDs ("check 2", "Spawn outdoors", "A14", "F-E"). Each question carries a recommended answer and what it blocks. Failed three times before this rule: Q47, the walk card's checks 2 and 12, and Q50 (`ISS-0052`).
+**R-COMMS-001.** Anything the director reads, such as a question, a checklist or a step to perform, is written in full, plain sentences: no shorthand, tags or bare IDs. Each question carries a recommended answer and what it blocks.
 
 <!-- factory-rules:end -->
 

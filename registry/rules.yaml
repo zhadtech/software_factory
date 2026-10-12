@@ -2,7 +2,6 @@
 # Field meanings and the status lifecycle: CHARTER.md. Check with: ruby scripts/check-registry.rb
 # Seeded 2026-10-13 from agi-standards AGENTS.md (R1-R40) and fog_of_war AGENTS.md (R41-R43, commit 0e8391b).
 # No seeded rule has been checked against a model yet, so checked_on is empty for all of them.
-# supersedes (not yet in CHARTER.md): the rules this one replaces once it moves to trial or active.
 # Proposals from the 2026-10-12 Agent Team Process Audit are at the end of the file.
 
 - id: R-BOOT-001
@@ -782,7 +781,7 @@
   title: The agent team builds the repo
   text: >-
     This repo is built by the SDLC agent team in `.claude/agents/`, in the lean mode defined in
-    `docs/sdlc/OPERATING-MODE.md`. When Zhad says "continue", "continue the project" or "keep
+    `docs/sdlc/OPERATING-MODE.md`. When the director says "continue", "continue the project" or "keep
     going", run the `continue-project` skill (`.claude/skills/continue-project/SKILL.md`). The main
     session dispatches and does not do role work itself.
   scope: [fog_of_war]
@@ -817,18 +816,17 @@
 
 - id: R-COMMS-001
   legacy_id: R43
-  title: Plain full sentences in anything Zhad reads
+  title: Plain full sentences in anything the director reads
   text: >-
-    Anything Zhad reads — a question, a walk card, a step to perform — is written in full, plain
-    sentences: no shorthand, tags or IDs ("check 2", "Spawn outdoors", "A14", "F-E"). Each question
-    carries a recommended answer and what it blocks. Failed three times before this rule: Q47, the
-    walk card's checks 2 and 12, and Q50 (`ISS-0052`).
+    Anything the director reads, such as a question, a checklist or a step to perform, is written
+    in full, plain sentences: no shorthand, tags or bare IDs. Each question carries a recommended
+    answer and what it blocks.
   scope: [all-projects]
   enforcement: rule-file
   where: fog_of_war/AGENTS.md
   sources:
     - fog_of_war AGENTS.md R43 (commit 0e8391b)
-  evidence: "fog_of_war: questions Zhad could not answer without decoding failed three times (Q47, the walk card's checks 2 and 12, Q50; ISS-0052) before this rule."
+  evidence: "fog_of_war: questions written in shorthand (\"check 2\", \"Spawn outdoors\", \"A14\") failed three times (Q47, the walk card's checks 2 and 12, Q50; ISS-0052) before this rule."
   checked_on:
   checked_at:
   review_by: 2026-12-31

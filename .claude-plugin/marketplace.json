@@ -1,8 +1,8 @@
 {
   "name": "software-factory",
-  "description": "Zhad's development process as plugins: hooks, team profiles and stack playbooks",
+  "description": "A development process for coding agents, as Claude Code plugins: hooks, team profiles and stack playbooks",
   "owner": {
-    "name": "Zhad"
+    "name": "zhadtech"
   },
   "plugins": [
     {

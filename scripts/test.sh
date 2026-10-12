@@ -33,6 +33,32 @@ template_smoke() {
 }
 run "a fresh project from the template passes its own verify" template_smoke
 
+guard_main() {
+  local d bad="" c
+  d=$(mktemp -d) || return 1
+  git -C "$d" init -q -b work
+  guard() { jq -n --arg c "$1" '{tool_input: {command: $c}}' | CLAUDE_PROJECT_DIR=$d bash .claude/hooks/guard-main.sh; }
+  for c in "git push origin main" "git push origin phase-2:main" "git push -u origin HEAD:refs/heads/main" \
+    "cd x && git push origin main && echo ok" "git -C /tmp/r push origin main" "git push --force origin work" \
+    "git push -f" "git push origin +work" "git push --all" "git push origin --delete work" "gh pr merge 3 --squash" \
+    "gh api -X PUT repos/zhadtech/software_factory/pulls/3/merge" "ls; git push origin main" "(git push origin main)"; do
+    guard "$c" | grep -q '"deny"' || bad="$bad
+  not blocked: $c"
+  done
+  for c in "git push -u origin phase-2" "git push origin work:work" "git status" "git log main --oneline" \
+    "git diff main" "gh pr create --draft" "git push origin main-fix" "echo git push origin main > notes.txt; ls" \
+    "gh pr view 3"; do
+    [ -z "$(guard "$c")" ] || bad="$bad
+  blocked by mistake: $c"
+  done
+  git -C "$d" checkout -q -b main
+  guard "git push" | grep -q '"deny"' || bad="$bad
+  not blocked: a bare push while main is checked out"
+  rm -rf "$d"
+  [ -z "$bad" ] || { printf '%s\n' "$bad"; return 1; }
+}
+run "the factory's main-branch guard" guard_main
+
 claude_bin=${CLAUDE_CODE_EXECPATH:-$(command -v claude)}
 if [ -n "$claude_bin" ] && [ -x "$claude_bin" ]; then
   run "marketplace manifest" "$claude_bin" plugin validate .

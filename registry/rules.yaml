@@ -1077,7 +1077,9 @@
   evidence: >-
     Trial A: given a plain request, the main session wrote the steps, the code and all three
     commits itself, and nothing was reviewed. Trial B: when the builder ended blocked, the main
-    session checked the builder's code by hand and made the S1 commit itself.
+    session checked the builder's code by hand and made the S1 commit itself. Trial C, with this rule
+    in the template and a Haiku main session: it handed the code to the builder unasked, but still
+    wrote the steps itself and re-ran the builder's checks when the builder was blocked.
   checked_on:
   checked_at:
   review_by: 2027-01-31

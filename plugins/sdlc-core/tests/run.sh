@@ -32,7 +32,6 @@ git init -q -b main . && git config user.email t@t && git config user.name t
 mkdir -p .claude plan progress .verify docs/sdlc
 cat > .claude/sdlc.json <<'JSON'
 {
-  "director": "Zhad",
   "trim_lines": 120,
   "handoff_agents": ["builder", "reviewer"],
   "heavy_files": ["package-lock.json", "*/Pods/*", "docs/archive/*"],
@@ -69,7 +68,7 @@ out=$(hook state-card.sh '{"source":"startup"}')
 check "state card shows the branch" has "$out" "Branch: main, 0 uncommitted"
 check "state card shows the last verify" has "$out" "Last verify: pass 2026-10-13"
 check "state card shows the next step" has "$out" "Next ready step: S2"
-check "state card counts waiting questions" has "$out" "waiting on Zhad: 2"
+check "state card counts waiting questions" has "$out" "waiting on the director: 2"
 check "state card reports budgets" has "$out" "all files within budget"
 check "state card includes now.md" has "$out" "Next: finish S4."
 

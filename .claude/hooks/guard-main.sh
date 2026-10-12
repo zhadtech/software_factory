@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # PreToolUse on Bash, for agents working on the factory itself.
-# Pushes to main, force pushes and merges are Zhad's (CHARTER.md), so they are denied here.
+# Pushes to main, force pushes and merges are the director's (CHARTER.md), so they are denied here.
 # GitHub branch protection needs GitHub Pro on a private repo; this hook stands in for it.
-# Covers Claude Code agents only; Zhad's own terminal is not affected.
+# Covers Claude Code agents only; the director's own terminal is not affected.
 cmd=$(jq -r '.tool_input.command // empty')
 [ -n "$cmd" ] || exit 0
 
 deny() {
-  jq -n --arg r "$1 Pushes to main, force pushes and merges are Zhad's (CHARTER.md). Push a branch and open a draft pull request; Zhad merges it." \
+  jq -n --arg r "$1 Pushes to main, force pushes and merges are the director's (CHARTER.md). Push a branch and open a draft pull request; the director merges it." \
     '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $r}}'
   exit 0
 }

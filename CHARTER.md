@@ -40,8 +40,8 @@ so each answer below is the recommended one. Change any of them by editing this 
 
 Projects pull; the factory never pushes into them. A plugin change reaches a project through
 Claude Code's plugin update when the plugin's version changes. A project refreshes the rules block
-in its `AGENTS.md` by running the factory's `scripts/build-agents-md.rb` on that file. Advice for one
-project lives in `recommendations/<project>.md` until the director adopts it there.
+in its `AGENTS.md` by running the factory's `scripts/build-agents-md.rb` on that file. The factory
+holds nothing about any one project.
 
 ## Principles
 

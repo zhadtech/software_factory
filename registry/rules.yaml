@@ -2,6 +2,8 @@
 # Field meanings and the status lifecycle: CHARTER.md. Check with: ruby scripts/check-registry.rb
 # Seeded 2026-10-13 from agi-standards AGENTS.md (R1-R40) and fog_of_war AGENTS.md (R41-R43, commit 0e8391b).
 # No seeded rule has been checked against a model yet, so checked_on is empty for all of them.
+# supersedes (not yet in CHARTER.md): the rules this one replaces once it moves to trial or active.
+# Proposals from the 2026-10-12 Agent Team Process Audit are at the end of the file.
 
 - id: R-BOOT-001
   legacy_id: R1
@@ -833,3 +835,228 @@
   status: active
   owner: director
 
+# Proposals, 2026-10-13. Sources: the Agent Team Process Audit,
+# which measured fog_of_war at commit abfb54c on 2026-10-12, plus the pool tips and official pages cited per rule.
+# Together they replace the 11 rules that name PLAN.md or PROGRESS.md, so the project template can use the
+# state card, plan/queue.json and the progress/ files.
+
+- id: R-BOOT-004
+  title: Boot from the state card
+  text: >-
+    At session start, act from the state card that the sdlc-core hook adds. It shows the branch, the
+    last verify, the next ready step, the questions waiting on the director, the size budgets and
+    progress/now.md. Then read only the step file plan/steps/S<n>.md and the files in the step's
+    context list. Do not grep, tour the tree, or read the queue or the git log to get oriented. If
+    the card and the step file are not enough, that is a bug in them: fix the file, then continue.
+  scope: [all-projects]
+  enforcement: hook
+  where: plugins/sdlc-core/scripts/state-card.sh
+  supersedes: [R-BOOT-001]
+  sources:
+    - "Agent Team Process Audit, finding F1 and workstream B (state card)"
+  evidence: "fog_of_war at abfb54c: the dispatcher read about 55K to 145K tokens before its first step, and PLAN.md was 1.19 MB."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PLAN-004
+  title: Steps live in the queue
+  text: >-
+    No task begins without its steps in plan/queue.json. Each open step has a step file
+    plan/steps/S<n>.md of at most 40 lines: goal, acceptance criteria, files, out of scope. When the
+    director gives a task and the queue has no step for it, write the steps first and confirm them
+    before writing code.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-PLAN-001]
+  sources:
+    - pool P25
+    - pool P26
+    - "Agent Team Process Audit, workstream A (queue as data)"
+  evidence: "fog_of_war at abfb54c: 203 of 229 steps in PLAN.md were done but still sat in the file every dispatcher read."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PLAN-005
+  title: Each step fits one sitting and its check tests behavior
+  text: >-
+    Each step must fit one sitting. Its verify field names a command that tests behavior, with an
+    exit code or an observable result. A prose step has verify none and, if it matters, a reviewer.
+    Never check prose with grep.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-PLAN-002]
+  sources:
+    - pool P27
+    - pool P28
+    - "Agent Team Process Audit, finding F4"
+  evidence: "fog_of_war steps S29, S63 and S65: grep checks on prose failed and forced wording rounds."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PLAN-006
+  title: The commit is the step log
+  text: >-
+    In the same turn a step is done: remove it from plan/queue.json, rewrite progress/now.md, and
+    commit with the trailers Step:, Tier:, Verify: and Open:. The commit is the step log; there is no
+    hand-written progress log. Read history with git log --grep='^Step: S<n>'.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-PLAN-003]
+  sources:
+    - pool P64
+    - "Agent Team Process Audit, workstream A (commit trailers)"
+  evidence: "fog_of_war at abfb54c: PROGRESS.md was 529 KB and repeated what the commits already said."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-SESS-007
+  title: A fresh context for each step
+  text: >-
+    Finish the current step and record it, then start the next step in a fresh context with /clear.
+    Do not stop at a fixed context percentage. Do not rely on compaction to carry state between
+    steps: the files and the state card carry it.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-SESS-002, R-SESS-003]
+  sources:
+    - https://www.anthropic.com/engineering/harness-design-long-running-apps
+    - "Agent Team Process Audit, workstreams E and G"
+  evidence: "Anthropic's harness post (2026-03-24) says Opus 4.5 largely removed context anxiety and the harness dropped context resets."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-SESS-008
+  title: Rewrite now.md before any stop
+  text: >-
+    Before a session ends for any reason, rewrite progress/now.md in 15 lines or fewer so a cold
+    agent can act from it and the state card alone.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-SESS-004]
+  sources:
+    - pool P61
+    - pool P63
+    - "Agent Team Process Audit, workstream A (split PROGRESS.md)"
+  evidence: "fog_of_war at abfb54c: the NEXT ACTION block had grown to 153 lines and 49 KB."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-SESS-009
+  title: Write down what was costly to learn
+  text: >-
+    Anything that cost more than a couple of tool calls to learn goes in a file: a dead end in
+    progress/dead-ends.md, a decision in progress/decisions.md, a location in INDEX.md, a module fact
+    in that module's CLAUDE.md. Knowledge that lives only in the transcript is paid for twice.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-SESS-005]
+  sources:
+    - pool P65
+    - "Agent Team Process Audit, workstream C"
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-SESS-010
+  title: One line per dead end
+  text: >-
+    Every failed approach goes in progress/dead-ends.md as one line: what was tried, why it failed,
+    what to do instead. Dead ends are kept forever.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-SESS-006]
+  sources:
+    - pool P59
+    - pool P67
+    - "Agent Team Process Audit, workstream A"
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-CTX-007
+  title: Rule changes go to the factory
+  text: >-
+    Do not edit AGENTS.md mid-session; it sits in the cached prompt prefix. Its rules are generated
+    from the factory's rule registry, so propose a rule change there, and note it in progress/now.md
+    meanwhile.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-CTX-001]
+  sources:
+    - pool P50
+    - "Software Factory Blueprint, section 4 (rule registry)"
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-CTX-008
+  title: Delegate only wide, independent work
+  text: >-
+    Delegate to a sub-agent only wide, independent work, such as a search across many files, and take
+    back the conclusion, not the file dumps. Never delegate to verify or double-check your own work.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  supersedes: [R-CTX-004]
+  sources:
+    - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5
+    - pool P48
+  evidence: "The Opus 5 prompting guide says Opus 5 delegates more readily and that verification instructions cause over-verification (read 2026-10-13)."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-VER-006
+  title: Quiet verify
+  text: >-
+    Verify and test commands print one line per stage on success. On failure they print the failing
+    cases only. The full log goes to .verify/.
+  scope: [all-projects]
+  enforcement: script
+  where: templates/project/scripts/verify.sh
+  sources:
+    - pool P47
+    - "Agent Team Process Audit, finding F6"
+  evidence: "fog_of_war at abfb54c: verify printed all 466 passing tests on every run, about 8K tokens each time."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director

@@ -12,6 +12,8 @@ ROOT = File.expand_path("..", __dir__)
 STATUSES = %w[pool proposed trial active deprecated retired].freeze
 ENFORCEMENTS = %w[prose rule-file hook lint ci script].freeze
 REQUIRED = %w[id title text scope enforcement where sources status owner review_by].freeze
+# A pool tip counts as promoted only while a rule citing it is in force.
+IN_FORCE = %w[trial active deprecated].freeze
 
 problems = []
 rules = YAML.safe_load_file(File.join(ROOT, "registry/rules.yaml"), permitted_classes: [Date])
@@ -40,7 +42,11 @@ rules.each do |r|
   problems << "#{id}: review_by must be a date" unless r["review_by"].is_a?(Date)
   Array(r["sources"]).each do |s|
     next unless (n = s.to_s[/\Apool P(\d+)\z/, 1])
-    tips.include?(n.to_i) ? cited[n.to_i] << id : problems << "#{id}: cites pool P#{n}, which does not exist"
+    next problems << "#{id}: cites pool P#{n}, which does not exist" unless tips.include?(n.to_i)
+    cited[n.to_i] << id if IN_FORCE.include?(r["status"])
+  end
+  Array(r["supersedes"]).each do |old|
+    problems << "#{id}: supersedes #{old}, which is not in the registry" unless ids.include?(old)
   end
 end
 
@@ -70,6 +76,7 @@ unless problems.empty?
 end
 
 active = rules.count { |r| r["status"] == "active" }
+proposed = rules.count { |r| r["status"] == "proposed" }
 unchecked = rules.count { |r| r["status"] == "active" && r["checked_on"].nil? }
-puts "registry ok: #{rules.size} rules (#{active} active, #{unchecked} never checked against a model), " \
+puts "registry ok: #{rules.size} rules (#{active} active, #{proposed} proposed, #{unchecked} active never checked against a model), " \
      "#{tips.size} pool tips (#{marked.size} promoted), #{rule_files.size} rule file(s) covered"

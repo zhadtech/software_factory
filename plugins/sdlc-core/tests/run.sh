@@ -39,7 +39,7 @@ cat > .claude/sdlc.json <<'JSON'
   "budgets": [
     { "path": "progress/now.md", "max_lines": 15, "hint": "Keep only the next action." },
     { "path": "INDEX.md", "max_line_chars": 40 },
-    { "path": "docs/sdlc/*.md", "max_lines": 5, "unless": "size-reason:" }
+    { "path": "docs/*.md", "max_lines": 5, "unless": "size-reason:", "except": "docs/archive/*" }
   ]
 }
 JSON
@@ -115,6 +115,9 @@ git add -A
 out=$("$B/sdlc-budget")
 check "sdlc-budget checks every budgeted file" has "$out" "docs/sdlc/long.md: 9 lines (budget 5)"
 check "unless exempts a file" lacks "$out" "exempt.md"
+mkdir -p docs/archive && seq 1 9 > docs/archive/old.md && git add -A
+out=$("$B/sdlc-budget")
+check "except skips matching files" lacks "$out" "docs/archive/old.md"
 out=$(hook state-card.sh '{"source":"startup"}')
 check "state card shows budget problems" has "$out" "progress/now.md: 20 lines"
 

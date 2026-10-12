@@ -2,7 +2,6 @@
 # Field meanings and the status lifecycle: CHARTER.md. Check with: ruby scripts/check-registry.rb
 # Seeded 2026-10-13 from agi-standards AGENTS.md (R1-R40) and fog_of_war AGENTS.md (R41-R43, commit 0e8391b).
 # No seeded rule has been checked against a model yet, so checked_on is empty for all of them.
-# supersedes (not yet in CHARTER.md): the rules this one replaces once it moves to trial or active.
 # Proposals from the 2026-10-12 Agent Team Process Audit are at the end of the file.
 
 - id: R-BOOT-001

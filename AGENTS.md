@@ -15,6 +15,7 @@ Rules for any agent changing this repo. Read once at session start, then read
 | `registry/rules.yaml` | Every rule, active or not | Changing or citing a rule. Read one entry, not the file |
 | `registry/pool.md` | 145 candidate tips (P1 to P145) | Promoting a tip. Read line ranges only |
 | `scripts/test.sh` | Every factory check in one run | Before every commit |
+| `.claude/hooks/guard-main.sh` | Blocks agent pushes to `main`, force pushes and merges | A guard blocks a command you think is fine |
 | `scripts/check-registry.rb` | Registry check | After any change under `registry/` |
 | `scripts/build-agents-md.rb` | Writes the rules block of the template AGENTS.md from the registry | After any rule change |
 | `.claude-plugin/marketplace.json` | The plugin catalog projects install from | Adding or renaming a plugin |
@@ -25,7 +26,8 @@ Rules for any agent changing this repo. Read once at session start, then read
 ## Rules
 
 **F1.** Work on a branch. Never commit to `main`. Never push, open a pull request, archive a repo
-or change GitHub settings without Zhad's yes for that one action.
+or change GitHub settings without Zhad's yes for that one action. `.claude/hooks/guard-main.sh`
+blocks agent pushes to `main`, force pushes and merges; it stands in for GitHub branch protection.
 **F2.** Never edit `CHARTER.md`. Never set a rule's status to trial, active, deprecated or retired.
 Propose the change; Zhad decides.
 **F3.** Every new or changed rule cites at least one source: a pool tip, an official doc URL, or a

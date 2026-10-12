@@ -17,8 +17,8 @@ effect when Zhad merges it.
 | Merge, tag a release | | Yes |
 | Move a rule to trial, active, deprecated or retired | | Yes |
 | Edit this charter or a stack's principles | | Yes |
-| Open version-bump pull requests in projects | Yes | Merge only |
-| Push, archive a repo, change GitHub or account settings | | Yes, each time |
+| Change files in another project | Never | Never through the factory; projects adopt changes themselves |
+| Push to `main`, merge, archive a repo, change GitHub or account settings | | Yes, each time |
 
 ## The seven starting decisions
 
@@ -32,8 +32,15 @@ so each answer below is the recommended one. Change any of them by editing this 
 | How often does the scout run? | Weekly, Monday 09:07 Zhad's local time. | Phase 3 |
 | Where does Zhad read the weekly digest? | A pinned web page plus the pull request list. A Trello card is optional. | Phase 3 |
 | Is the five-role lean team the default for new projects? | Yes. The 13-role team is opt-in, for projects that need an audit trail. | Phase 2 |
-| How much may evals spend each month? | Evals run only on pull requests that touch a plugin, three runs per case, under a monthly ceiling. The ceiling amount is still open. | Phase 2 |
+| How much may evals spend each month? | Evals run only on pull requests that touch a plugin, three runs per case, under a monthly ceiling. Skipped for now on 2026-10-13, so evals wait. | Phase 2 |
 | Do scheduled jobs run as routines on Zhad's plan or as GitHub Actions on an API key? | Routines on the plan. Move to an API key only if routine usage gets tight. | Phase 3 |
+
+## How projects get updates
+
+Projects pull; the factory never pushes into them. A plugin change reaches a project through
+Claude Code's plugin update when the plugin's version changes. A project refreshes the rules block
+in its `AGENTS.md` by running the factory's `scripts/build-agents-md.rb` on that file. Advice for one
+project lives in `recommendations/<project>.md` until Zhad adopts it there.
 
 ## Principles
 
@@ -55,6 +62,7 @@ that are not rules yet. `ruby scripts/check-registry.rb` proves the two agree.
 |---|---|
 | `id` | Stable ID by area, such as `R-CTX-005`. |
 | `legacy_id` | The rule's number in the old rule file, such as `R17`, while projects still cite it. |
+| `supersedes` | The rules this one replaces once it moves to trial or active. |
 | `text` | The rule as an agent reads it. |
 | `scope` | `all-projects`, a stack, or one project. |
 | `enforcement` | `prose`, `rule-file`, `hook`, `lint`, `ci` or `script`. |

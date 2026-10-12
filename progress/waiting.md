@@ -1,7 +1,10 @@
 # Waiting on Zhad
 
-1. Turn on branch protection for `main`, so only Zhad merges? Recommended: yes. Blocks: "agents
-   propose, Zhad merges" is only a written rule until then.
+1. How should `main` be protected, so only Zhad merges? GitHub refuses branch protection on this
+   private repo without GitHub Pro (checked 2026-10-13). Options: pay for Pro; make the repo public;
+   or add a hook to this repo that blocks any agent push to `main`. Recommended: the hook, which is
+   free and works now; buy Pro later if a second person joins. Blocks: "agents propose, Zhad merges"
+   is only a written rule until then.
 2. Archive `zhadtech/agi-standards` and `zhadtech/list-agents` on GitHub, so they are read-only?
    Recommended: yes. Blocks: nothing yet.
 3. What is the monthly ceiling for eval spending? Recommended: start small, about the cost of one

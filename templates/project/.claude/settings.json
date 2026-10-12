@@ -1,0 +1,22 @@
+{
+  "extraKnownMarketplaces": {
+    "software-factory": {
+      "source": { "source": "github", "repo": "zhadtech/software_factory" }
+    }
+  },
+  "enabledPlugins": {
+    "sdlc-core@software-factory": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(scripts/verify.sh)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(rg *)",
+      "Bash(jq *)",
+      "Bash(next-step*)",
+      "Bash(sdlc-budget*)"
+    ]
+  }
+}

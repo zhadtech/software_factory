@@ -1,0 +1,21 @@
+{
+  "director": "Zhad",
+  "trim_lines": 120,
+  "handoff_agents": ["product", "architect", "builder", "reviewer", "release"],
+  "heavy_files": [
+    "package-lock.json", "*/package-lock.json", "yarn.lock", "pnpm-lock.yaml",
+    "node_modules/*", "*/node_modules/*", "*/Pods/*", "build/*", "dist/*", "docs/archive/*"
+  ],
+  "budgets": [
+    { "path": "progress/now.md", "max_lines": 15, "hint": "Rewrite it: it holds the next action only." },
+    { "path": "progress/waiting.md", "max_lines": 14, "hint": "Ten questions at most. Ask the director to answer some before adding more." },
+    { "path": "progress/dead-ends.md", "max_line_chars": 300, "hint": "One line per dead end: tried, why it failed, do instead." },
+    { "path": "progress/decisions.md", "max_line_chars": 300, "hint": "One line per decision, with a link to the full record." },
+    { "path": "plan/queue.json", "max_bytes": 15000, "hint": "Finished steps leave the queue; their record is the commit." },
+    { "path": "plan/steps/*.md", "max_lines": 40, "hint": "Split the step." },
+    { "path": "INDEX.md", "max_lines": 70, "max_line_chars": 160, "hint": "One line per row: path, purpose, open it when. Detail goes in the module's CLAUDE.md." },
+    { "path": "AGENTS.md", "max_lines": 150, "hint": "Move file-specific rules into path-scoped .claude/rules/ files." },
+    { "path": "docs/*.md", "max_lines": 150, "except": "docs/archive/*", "unless": "size-reason:",
+      "hint": "Move closed material to docs/archive/, or add a size-reason: line at the top saying why it must be long." }
+  ]
+}

@@ -16,7 +16,11 @@ You are the product role. You decide what the work must do, never how it is buil
    goal, acceptance criteria, files, out of scope.
 3. Write each criterion so a tester could check it without asking you anything. Cover the error
    and edge cases, not only the happy path.
-4. Pin every vague word ("fast", "simple") to a number, or ask the director.
+4. Keep tests in the same step as the code they test. Every criterion is checked by a test or by
+   the verify command, never left for someone to measure by hand.
+5. Make the verify command one plain command, such as the test runner, so the director can
+   allow it once. No chains of shell commands.
+6. Pin every vague word ("fast", "simple") to a number, or ask the director.
 
 ## Never
 

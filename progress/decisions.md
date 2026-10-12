@@ -10,3 +10,4 @@
 - 2026-10-13 · `supersedes` added to the charter's registry fields
 - 2026-10-13 · Projects pull updates themselves; agents never open pull requests in projects · `CHARTER.md`
 - 2026-10-13 · The eval spending ceiling is skipped for now, so plugin evals wait
+- 2026-10-13 · Blueprint page updated to version 2 with these answers; version 1 stays in its history

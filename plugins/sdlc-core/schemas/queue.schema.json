@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "plan/queue.json",
+  "description": "Open steps only. A finished step leaves the file; its record is the commit with a Step: trailer.",
+  "type": "object",
+  "required": ["next_id", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "next_id": { "type": "integer", "minimum": 1, "description": "Number for the next new step, S<next_id>" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "owner", "tier", "status", "verify"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^S[0-9]+$" },
+          "title": { "type": "string", "maxLength": 100 },
+          "owner": { "type": "string", "description": "Role that does the step, such as builder" },
+          "tier": { "enum": ["S", "M", "L"], "description": "S small, M normal, L risky" },
+          "model": { "type": "string", "description": "Model alias for the role agent, such as opus" },
+          "effort": { "enum": ["low", "medium", "high", "xhigh", "max"] },
+          "after": { "type": "array", "items": { "type": "string", "pattern": "^S[0-9]+$" }, "description": "Steps that must be done first" },
+          "status": { "enum": ["ready", "in_progress", "blocked", "done"] },
+          "verify": { "type": "string", "description": "Command that proves the step works, or none for a prose step" },
+          "review": { "type": "string", "description": "Role that reviews the step, or none" },
+          "context": { "type": "array", "items": { "type": "string" }, "description": "The only files the agent opens besides its step file" }
+        }
+      }
+    }
+  }
+}

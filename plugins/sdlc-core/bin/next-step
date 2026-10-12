@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Prints the first ready step in the queue whose "after" steps are all done.
+# A step that has left the queue counts as done.
+#   next-step [queue file]      default: plan/queue.json
+# Exit 0 with one line; exit 1 when no step is ready; exit 2 when there is no queue.
+queue=${1:-plan/queue.json}
+[ -f "$queue" ] || { echo "no queue at $queue"; exit 2; }
+line=$(jq -r '
+  (.steps | map({key: .id, value: .status}) | from_entries) as $status
+  | [.steps[] | select(.status == "ready")
+      | select(all((.after // [])[]; ($status[.] // "done") == "done"))][0]
+  | if . == null then empty else
+      "\(.id) · \(.owner) · tier \(.tier) · \(.title)"
+      + (if (.context // []) | length > 0 then " · read: " + (.context | join(", ")) else "" end)
+    end' "$queue") || exit 2
+[ -n "$line" ] || { echo "no ready step in $queue"; exit 1; }
+echo "$line"

@@ -1,0 +1,21 @@
+{
+  "description": "sdlc-core: state card, heavy-read guard, output trimmer, size budgets, handoff check, compaction snapshot",
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/state-card.sh" }] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Read", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/guard-heavy-files.sh" }] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Bash", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/trim-output.sh" }] },
+      { "matcher": "Edit|Write", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/budget-check.sh" }] }
+    ],
+    "SubagentStop": [
+      { "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/check-handoff.sh" }] }
+    ],
+    "PreCompact": [
+      { "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/snapshot-state.sh" }] }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "sdlc-core",
+  "version": "0.1.0",
+  "description": "Hooks that keep sessions cheap and resumable: a state card at session start, a guard on whole reads of heavy files, trimmed command output, size budgets on boot files, a handoff check for role agents, and a snapshot before compaction. Every hook is off unless the project has .claude/sdlc.json.",
+  "author": {
+    "name": "Zhad"
+  },
+  "repository": "https://github.com/zhadtech/software_factory"
+}

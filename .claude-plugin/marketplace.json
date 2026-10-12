@@ -1,0 +1,14 @@
+{
+  "name": "software-factory",
+  "description": "Zhad's development process as plugins: hooks, team profiles and stack playbooks",
+  "owner": {
+    "name": "Zhad"
+  },
+  "plugins": [
+    {
+      "name": "sdlc-core",
+      "source": "./plugins/sdlc-core",
+      "description": "Hooks that keep sessions cheap and resumable: state card, heavy-read guard, output trimmer, size budgets, handoff check, compaction snapshot"
+    }
+  ]
+}

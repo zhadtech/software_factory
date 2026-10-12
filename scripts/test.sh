@@ -22,9 +22,9 @@ run "template budget.sh matches sdlc-budget" cmp plugins/sdlc-core/bin/sdlc-budg
 template_smoke() {
   local d
   d=$(mktemp -d) || return 1
-  cp -R templates/project/. "$d/"
+  bash scripts/new-project.sh "$d" >/dev/null || return 1
   (
-    cd "$d" && git init -q -b main . && git add -A &&
+    cd "$d" && [ -z "$(git status --porcelain)" ] &&
       out=$(scripts/verify.sh) && printf '%s\n' "$out" | grep -q '^budget: pass' &&
       [ "$(printf '%s\n' "$out" | tail -1)" = "verify: pass" ] && grep -q '^pass ' .verify/last-result &&
       jq -e '.steps == []' plan/queue.json >/dev/null &&

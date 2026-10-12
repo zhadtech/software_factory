@@ -14,6 +14,7 @@ Rules for any agent changing this repo. Read once at session start, then read
 | `registry/rules.yaml` | Every rule, active or not | Changing or citing a rule. Read one entry, not the file |
 | `registry/pool.md` | 145 candidate tips (P1 to P145) | Promoting a tip. Read line ranges only |
 | `scripts/test.sh` | Every factory check in one run | Before every commit |
+| `scripts/new-project.sh` | Starts a project from the template in a new folder | Making a trial project |
 | `.claude/hooks/guard-main.sh` | Blocks agent pushes to `main`, force pushes and merges | A guard blocks a command you think is fine |
 | `scripts/check-registry.rb` | Registry check | After any change under `registry/` |
 | `scripts/build-agents-md.rb` | Writes the rules block of the template AGENTS.md from the registry | After any rule change |

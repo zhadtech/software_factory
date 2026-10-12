@@ -11,9 +11,17 @@ root=${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}
 config="$root/.claude/sdlc.json"
 [ -f "$config" ] || exit 0
 cd "$root" || exit 2
-patterns=() budgets=()
-while IFS= read -r line; do patterns+=("$line"); done < <(jq -r '.budgets // [] | .[] | .path' "$config")
-while IFS= read -r line; do budgets+=("$line"); done < <(jq -c '.budgets // [] | .[]' "$config")
+
+# Read each budget field once, one line per budget, so the per-file loop runs no jq.
+field() { jq -r --arg f "$1" '.budgets // [] | .[] | (.[$f] // "" | tostring | gsub("\n"; " "))' "$config"; }
+patterns=() excepts=() unlesses=() hints=() max_lines=() max_bytes=() max_chars=()
+while IFS= read -r v; do patterns+=("$v"); done < <(field path)
+while IFS= read -r v; do excepts+=("$v"); done < <(field except)
+while IFS= read -r v; do unlesses+=("$v"); done < <(field unless)
+while IFS= read -r v; do hints+=("$v"); done < <(field hint)
+while IFS= read -r v; do max_lines+=("$v"); done < <(field max_lines)
+while IFS= read -r v; do max_bytes+=("$v"); done < <(field max_bytes)
+while IFS= read -r v; do max_chars+=("$v"); done < <(field max_line_chars)
 [ ${#patterns[@]} -gt 0 ] || exit 0
 
 if [ $# -gt 0 ]; then files=$(printf '%s\n' "$@")
@@ -23,27 +31,23 @@ status=0
 while IFS= read -r file; do
   [ -f "$file" ] || continue
   for i in "${!patterns[@]}"; do
-    # shellcheck disable=SC2053  # the pattern is a glob on purpose
+    # shellcheck disable=SC2053  # patterns are globs on purpose
     [[ $file == ${patterns[$i]} ]] || continue
-    b=${budgets[$i]}
-    except=$(jq -r '.except // empty' <<<"$b")
-    # shellcheck disable=SC2053  # the pattern is a glob on purpose
-    [ -n "$except" ] && [[ $file == $except ]] && continue
-    unless=$(jq -r '.unless // empty' <<<"$b")
-    [ -n "$unless" ] && head -15 "$file" | grep -qF "$unless" && continue
-    hint=$(jq -r '.hint // empty' <<<"$b")
+    # shellcheck disable=SC2053
+    [ -n "${excepts[$i]}" ] && [[ $file == ${excepts[$i]} ]] && continue
+    [ -n "${unlesses[$i]}" ] && head -15 "$file" | grep -qF "${unlesses[$i]}" && continue
     problems=""
-    max=$(jq -r '.max_lines // empty' <<<"$b")
+    max=${max_lines[$i]}
     if [ -n "$max" ]; then n=$(awk 'END { print NR }' "$file"); [ "$n" -gt "$max" ] && problems="$problems, $n lines (budget $max)"; fi
-    max=$(jq -r '.max_bytes // empty' <<<"$b")
+    max=${max_bytes[$i]}
     if [ -n "$max" ]; then n=$(wc -c <"$file" | tr -d ' '); [ "$n" -gt "$max" ] && problems="$problems, $n bytes (budget $max)"; fi
-    max=$(jq -r '.max_line_chars // empty' <<<"$b")
+    max=${max_chars[$i]}
     if [ -n "$max" ]; then
       n=$(LC_ALL=en_US.UTF-8 awk -v m="$max" 'length($0) > m { c++ } END { print c + 0 }' "$file")
       [ "$n" -gt 0 ] && problems="$problems, $n line(s) longer than $max characters"
     fi
     if [ -n "$problems" ]; then
-      echo "$file:${problems#,}${hint:+. $hint}"
+      echo "$file:${problems#,}${hints[$i]:+. ${hints[$i]}}"
       status=1
     fi
   done

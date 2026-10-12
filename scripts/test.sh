@@ -26,8 +26,8 @@ template_smoke() {
   cp -R templates/project/. "$d/"
   (
     cd "$d" && git init -q -b main . && git add -A &&
-      out=$(scripts/verify.sh) && [ "$out" = "budget: pass (0s)
-verify: pass" ] && grep -q '^pass ' .verify/last-result &&
+      out=$(scripts/verify.sh) && printf '%s\n' "$out" | grep -q '^budget: pass' &&
+      [ "$(printf '%s\n' "$out" | tail -1)" = "verify: pass" ] && grep -q '^pass ' .verify/last-result &&
       jq -e '.steps == []' plan/queue.json >/dev/null &&
       { plugins_bin=$OLDPWD/plugins/sdlc-core/bin; "$plugins_bin/next-step" >/dev/null; [ $? -eq 1 ]; }
   ) || { echo "template verify or queue check failed in $d"; return 1; }

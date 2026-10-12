@@ -4,7 +4,9 @@
    PLAN.md or PROGRESS.md, so the template can use the state card, the step queue and the small
    progress files. Recommended: yes, all 11. Blocks: question 2.
 2. May an agent install sdlc-core and the template into fog_of_war, on a new branch in that repo,
-   together with the audit's day-one changes? Recommended: yes. Blocks: finishing phase 1.
+   after the `process/lean-boot` work there merges? That session already did most of the audit's
+   day-one changes, so the install adds only the config, the progress files and quiet verify.
+   Recommended: yes. Blocks: finishing phase 1.
 3. Create the private GitHub repo `zhadtech/software_factory` and push `phase-1` as `main`?
    Recommended: yes. Blocks: installing the plugin from GitHub, branch protection, pull requests.
 4. Turn on branch protection for `main`, so only Zhad merges? Recommended: yes, right after the

@@ -19,6 +19,7 @@ Rules for any agent changing this repo. Read once at session start, then read
 | `scripts/build-agents-md.rb` | Writes the rules block of the template AGENTS.md from the registry | After any rule change |
 | `.claude-plugin/marketplace.json` | The plugin catalog projects install from | Adding or renaming a plugin |
 | `plugins/sdlc-core/` | Hooks, `next-step`, `sdlc-budget`, queue schema; tests in `tests/run.sh` | Changing a hook |
+| `plugins/sdlc-lean/` | The five role agents: product, architect, builder, reviewer, release; tests in `tests/run.sh` | Changing a role |
 | `templates/project/` | Starting files for a project: rules, settings, budgets, queue, progress files, quiet verify | Changing what a new project gets |
 | `seeds/agi-standards/`, `seeds/list-agents/` | The two old repos, with history | A step moves content out of them |
 

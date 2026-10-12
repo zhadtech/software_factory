@@ -5,7 +5,8 @@
     }
   },
   "enabledPlugins": {
-    "sdlc-core@software-factory": true
+    "sdlc-core@software-factory": true,
+    "sdlc-lean@software-factory": true
   },
   "permissions": {
     "allow": [

@@ -12,7 +12,7 @@ ROOT = File.expand_path("..", __dir__)
 AREAS = {
   "BOOT" => "Boot", "PLAN" => "Plan and steps", "SESS" => "Sessions", "CTX" => "Context economy",
   "CODE" => "Writing code", "VER" => "Verification", "GIT" => "Git and blast radius",
-  "TRUST" => "Trust boundary", "META" => "Maintaining the rules", "COMMS" => "Writing for the director"
+  "TEAM" => "The team", "TRUST" => "Trust boundary", "META" => "Maintaining the rules", "COMMS" => "Writing for the director"
 }.freeze
 START = /^<!-- factory-rules:start statuses=([a-z,]+)$/
 FINISH = "<!-- factory-rules:end -->"

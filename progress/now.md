@@ -8,8 +8,8 @@ by the sdlc-core 0.2.0 role-work guard. sdlc-core also checks plan/queue.json ag
 Five trials ran on 2026-10-13; R-TEAM-003's evidence says what each showed. In trial E, interactive and
 with the guard, the main session handed the work to product and builder unasked.
 
-Next action: wait for the director's answer in progress/waiting.md on which steps get a review,
-then set it in product's instructions. After that, pick the first stack playbook.
+Next action: pick the first stack playbook for phase 2. Product now names the reviewer on tier M
+and L steps (the director, 2026-10-13).
 
 | Phase | State |
 |---|---|

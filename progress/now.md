@@ -7,9 +7,8 @@ engine and TypeScript web), #5 (the other stacks), #6 (the scout, propagation, a
 The first scout run and the first audit are in `intel/inbox/2026-10-13.md` and
 `audits/2026-10-13.md`. A fresh project boots on 11,023 bytes.
 
-Next action: wait for the director's two answers in `progress/waiting.md`. With a yes on the
-first, create the routines with the schedule skill: each one's prompt is "Follow intel/scout.md"
-or "Follow audits/auditor.md" in this repo.
+Next action: once the director gives Claude's GitHub app access to the repo, create the routines
+with the schedule skill (crons `7 2 * * 1` and `7 3 * * 1` UTC; the audit prompt stops after the 7th).
 
 | Phase | State |
 |---|---|

@@ -24,4 +24,4 @@
 - 2026-10-13 · New projects auto-update the factory's plugins (the template turns on `autoUpdate` for its marketplace); rules in a project's AGENTS.md change only when the project runs `sdlc-update` · `templates/project/.claude/settings.json`
 - 2026-10-13 · Boot cost means the bytes of CLAUDE.md, AGENTS.md, the state card and the lean roles' descriptions in a fresh template project: 11,023 on 2026-10-13 · `scripts/metrics.sh`
 - 2026-10-13 · The digest's pinned page is `intel/digest.md` on GitHub; the audit runs on the first Monday of each month, after the scout · `audits/auditor.md`
-- 2026-10-13 · Create the scout (Mondays 09:07) and audit (first Monday 10:07) routines, Asia/Saigon time (the director: "yes, create the routines"); blocked on GitHub repo access
+- 2026-10-13 · The scout (Mondays 09:07) and audit (first Monday 10:07) run as routines on the director's plan, Asia/Saigon time, on Sonnet 5.5, with no connectors: https://claude.ai/code/routines/trig_01HgsdZqxr3RJBV2TPZHb5M9 and https://claude.ai/code/routines/trig_01TP16Hepf3HpgktviZgbRAA (the director: "yes, create the routines")

@@ -18,7 +18,7 @@
     {
       "name": "sdlc-stacks",
       "source": "./plugins/sdlc-stacks",
-      "description": "Stack rules, added the first time Claude touches a file they cover. Python, TypeScript, React, Next.js, React Native and Expo so far"
+      "description": "Stack rules for web, mobile, desktop, IoT, game and .NET projects, added the first time Claude touches a file they cover"
     }
   ]
 }

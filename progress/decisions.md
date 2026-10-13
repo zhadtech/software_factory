@@ -20,3 +20,4 @@
 - 2026-10-13 · Stack rules reach projects through a plugin hook, since Claude Code does not load rules files from plugins · `plugins/sdlc-stacks/`
 - 2026-10-13 · The charter's registry fields gain `paths`, for stack rules (the director: yes) · `CHARTER.md`
 - 2026-10-13 · The factory does not use fog_of_war to choose its stacks or as a source for their rules
+- 2026-10-13 · "Studios" in the director's list of app types is read as studio-built apps: .NET (Visual Studio) and Unity each get a stack

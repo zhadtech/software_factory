@@ -1526,3 +1526,445 @@
   review_by: 2027-01-31
   status: proposed
   owner: director
+
+- id: R-SWIFT-001
+  title: Update the UI only on the main actor
+  text: >-
+    Update the UI only on the main actor. Mark view models and other UI state `@MainActor`, and
+    never change the UI from a background task.
+  scope: [stack:swift]
+  paths: ["*.swift"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://developer.apple.com/documentation/swift/mainactor
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-SWIFT-002
+  title: No force unwraps or try! in app code
+  text: >-
+    In app code, never force-unwrap an optional with `!` or call a throwing function with `try!`:
+    either one crashes the app when it fails. Use `if let`, `guard let` or `??`, and `do`/`catch` or
+    `try?`. Tests may force-unwrap.
+  scope: [stack:swift]
+  paths: ["*.swift"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.swift.org/swift-book/documentation/the-swift-programming-language/thebasics/
+    - https://docs.swift.org/swift-book/documentation/the-swift-programming-language/errorhandling/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-SWIFT-003
+  title: Add a purpose string before using a protected resource
+  text: >-
+    Before code uses a protected resource, such as the camera, location or contacts, add that
+    resource's purpose string (`NS...UsageDescription`) to `Info.plist`. Without it, access fails
+    and the app may crash.
+  scope: [stack:swift]
+  paths: ["*.swift", "*Info.plist"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://developer.apple.com/documentation/uikit/requesting-access-to-protected-resources
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-ANDROID-001
+  title: Keep blocking work off the main thread
+  text: >-
+    Make suspend functions safe to call from the main thread: move blocking work, such as disk or
+    network access, off it with `withContext` and a dispatcher passed in to the class. Do not
+    hardcode `Dispatchers.IO`, so tests can swap the dispatcher.
+  scope: [stack:android]
+  paths: ["*.kt", "*.java"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://developer.android.com/kotlin/coroutines/coroutines-best-practices
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-GRADLE-001
+  title: Build with the Gradle wrapper
+  text: >-
+    Run Gradle through the project's wrapper, `./gradlew`, never a `gradle` installed on the
+    machine, so every build uses the Gradle version the project chose.
+  scope: [stack:gradle]
+  paths: ["*build.gradle", "*build.gradle.kts", "*settings.gradle*", "*gradle.properties", "*gradle-wrapper.properties", "*libs.versions.toml"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.gradle.org/current/userguide/gradle_wrapper.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-GRADLE-002
+  title: Declare versions in the version catalog
+  text: >-
+    If the project has `gradle/libs.versions.toml`, declare dependencies and their versions there,
+    and refer to them from build files. Do not write a version inline in a build file.
+  scope: [stack:gradle]
+  paths: ["*build.gradle", "*build.gradle.kts", "*settings.gradle*", "*gradle.properties", "*gradle-wrapper.properties", "*libs.versions.toml"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.gradle.org/current/userguide/version_catalogs.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-ELECTRON-001
+  title: Keep renderers isolated
+  text: >-
+    Keep `contextIsolation` and `sandbox` on, and `nodeIntegration` off, in every `BrowserWindow`
+    and webview. Never flip one of them to make a feature work.
+  scope: [stack:electron]
+  paths: ["*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://www.electronjs.org/docs/latest/tutorial/security
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-ELECTRON-002
+  title: Expose only named functions from preload
+  text: >-
+    In a preload script, expose only named functions through `contextBridge`. Never expose
+    `ipcRenderer` or any other Electron API itself to the page.
+  scope: [stack:electron]
+  paths: ["*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://www.electronjs.org/docs/latest/tutorial/security
+    - https://www.electronjs.org/docs/latest/tutorial/context-isolation
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-ELECTRON-003
+  title: Validate every IPC message
+  text: >-
+    In the main process, check the `sender` of every IPC message and validate its arguments before
+    you act on them.
+  scope: [stack:electron]
+  paths: ["*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://www.electronjs.org/docs/latest/tutorial/security
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-RUST-001
+  title: Return errors instead of panicking
+  text: >-
+    In library code and in code that handles input, return a `Result` instead of calling `unwrap()`,
+    `expect()` or `panic!`. Keep `unwrap()` for tests and for cases that cannot fail, with a comment
+    that says why.
+  scope: [stack:rust]
+  paths: ["*.rs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://doc.rust-lang.org/book/ch09-03-to-panic-or-not-to-panic.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-RUST-002
+  title: Run clippy and the tests
+  text: >-
+    Before you call a step done, run `cargo clippy` and `cargo test`, and fix the warnings clippy
+    reports.
+  scope: [stack:rust]
+  paths: ["*.rs", "*Cargo.toml"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://doc.rust-lang.org/clippy/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-TAURI-001
+  title: Grant each window only the permissions it needs
+  text: >-
+    Grant each window only the permissions it needs, in a capability file under
+    `src-tauri/capabilities/`. Never widen a scope, such as file system access, beyond what the
+    feature uses.
+  scope: [stack:tauri]
+  paths: ["*src-tauri/capabilities/*", "*tauri.conf.json*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://v2.tauri.app/security/capabilities/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-TAURI-002
+  title: Commands return errors and check their input
+  text: >-
+    A Tauri command that can fail returns a `Result` whose error the frontend can show; it never
+    panics. Validate every argument that comes from the frontend.
+  scope: [stack:tauri]
+  paths: ["*.rs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://v2.tauri.app/develop/calling-rust/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-ARDUINO-001
+  title: Keep interrupt handlers short
+  text: >-
+    Keep an interrupt handler short and fast, with no waiting: `delay()` does not work inside one
+    and `millis()` stops counting. Declare every variable it shares with the main program
+    `volatile`.
+  scope: [stack:arduino]
+  paths: ["*.ino", "*.c", "*.cpp", "*.h", "*.hpp"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-ARDUINO-002
+  title: Keep credentials out of firmware source
+  text: >-
+    Never write Wi-Fi passwords, API keys or device credentials into source files. Keep them in an
+    untracked file, such as a `secrets.h` listed in `.gitignore`, or pass them in as build flags.
+  scope: [stack:arduino]
+  paths: ["*.ino", "*.c", "*.cpp", "*.h", "*.hpp", "*platformio.ini"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://owasp.org/www-project-internet-of-things/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PIO-001
+  title: Declare libraries and build per environment
+  text: >-
+    Declare libraries in `lib_deps` in `platformio.ini`, each with a version. Build and test with
+    `pio run` and `pio test` for the board you changed, using `-e <environment>`.
+  scope: [stack:platformio]
+  paths: ["*platformio.ini", "src/*", "*/src/*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.platformio.org/en/latest/projectconf/sections/env/options/library/lib_deps.html
+    - https://docs.platformio.org/en/latest/core/userguide/cmd_run.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-GODOT-001
+  title: Type GDScript statically
+  text: >-
+    Give variables, parameters and return values static types in GDScript, such as `var speed: float
+    = 200.0` and `func hit(damage: int) -> void:`.
+  scope: [stack:godot]
+  paths: ["*.gd"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/static_typing.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-GODOT-002
+  title: Move bodies in _physics_process
+  text: >-
+    Put movement and physics code in `_physics_process(delta)`, which runs at a fixed rate, not in
+    `_process(delta)`.
+  scope: [stack:godot]
+  paths: ["*.gd"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.godotengine.org/en/stable/tutorials/scripting/idle_and_physics_processing.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-GODOT-003
+  title: Signal up instead of reaching across the tree
+  text: >-
+    Design scenes with no dependencies on where they are placed. A child tells its parent what
+    happened with a signal; it does not reach up or across the tree with long `get_node()` paths.
+  scope: [stack:godot]
+  paths: ["*.gd", "*.tscn"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.godotengine.org/en/stable/tutorials/best_practices/scene_organization.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-UNITY-001
+  title: Move assets with their .meta files
+  text: >-
+    Move or rename assets inside the Unity Editor. If you must do it on disk, move or rename the
+    asset's `.meta` file with it: the `.meta` file holds the ID that every reference to the asset
+    uses.
+  scope: [stack:unity]
+  paths: ["Assets/*", "*/Assets/*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.unity3d.com/Manual/AssetMetadata.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-UNITY-002
+  title: Do not search for objects every frame
+  text: >-
+    Never search for objects, such as with `GameObject.Find`, in `Update` or other code that runs
+    every frame. Look the reference up once, in `Awake` or `Start`, and keep it in a field.
+  scope: [stack:unity]
+  paths: ["*.cs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.unity3d.com/ScriptReference/GameObject.Find.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-UNITY-003
+  title: Apply physics in FixedUpdate
+  text: >-
+    Apply forces and other `Rigidbody` changes in `FixedUpdate`, not in `Update`, so physics stays
+    the same at any frame rate.
+  scope: [stack:unity]
+  paths: ["*.cs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-DOTNET-001
+  title: Await tasks instead of blocking on them
+  text: >-
+    Await tasks. Never block on one with `.Result` or `.Wait()`; make the calling method `async`
+    instead.
+  scope: [stack:dotnet]
+  paths: ["*.cs"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-DOTNET-002
+  title: Keep nullable reference types on
+  text: >-
+    Keep nullable reference types on (`<Nullable>enable</Nullable>`) and fix their warnings. Never
+    silence one with the `!` operator unless the code has already checked the value.
+  scope: [stack:dotnet]
+  paths: ["*.cs", "*.csproj"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director

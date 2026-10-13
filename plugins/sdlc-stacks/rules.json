@@ -61,9 +61,225 @@
           "contains": "\"expo\""
         }
       ]
+    },
+    {
+      "id": "swift",
+      "title": "Swift",
+      "markers": [
+        {
+          "file": "*Package.swift"
+        },
+        {
+          "file": "*.xcodeproj/*"
+        }
+      ]
+    },
+    {
+      "id": "android",
+      "title": "Android",
+      "markers": [
+        {
+          "file": "*AndroidManifest.xml"
+        }
+      ]
+    },
+    {
+      "id": "gradle",
+      "title": "Gradle",
+      "markers": [
+        {
+          "file": "*build.gradle"
+        },
+        {
+          "file": "*build.gradle.kts"
+        },
+        {
+          "file": "*settings.gradle*"
+        }
+      ]
+    },
+    {
+      "id": "electron",
+      "title": "Electron",
+      "markers": [
+        {
+          "file": "*package.json",
+          "contains": "\"electron\""
+        }
+      ]
+    },
+    {
+      "id": "rust",
+      "title": "Rust",
+      "markers": [
+        {
+          "file": "*Cargo.toml"
+        }
+      ]
+    },
+    {
+      "id": "tauri",
+      "title": "Tauri",
+      "markers": [
+        {
+          "file": "*tauri.conf.json*"
+        }
+      ]
+    },
+    {
+      "id": "arduino",
+      "title": "Arduino and microcontrollers",
+      "markers": [
+        {
+          "file": "*.ino"
+        },
+        {
+          "file": "*platformio.ini"
+        }
+      ]
+    },
+    {
+      "id": "platformio",
+      "title": "PlatformIO",
+      "markers": [
+        {
+          "file": "*platformio.ini"
+        }
+      ]
+    },
+    {
+      "id": "godot",
+      "title": "Godot",
+      "markers": [
+        {
+          "file": "*project.godot"
+        }
+      ]
+    },
+    {
+      "id": "unity",
+      "title": "Unity",
+      "markers": [
+        {
+          "file": "*ProjectSettings/ProjectVersion.txt"
+        }
+      ]
+    },
+    {
+      "id": "dotnet",
+      "title": ".NET",
+      "markers": [
+        {
+          "file": "*.csproj"
+        },
+        {
+          "file": "*.sln"
+        },
+        {
+          "file": "*.slnx"
+        }
+      ]
     }
   ],
   "rules": [
+    {
+      "id": "R-ANDROID-001",
+      "stack": "android",
+      "status": "proposed",
+      "paths": [
+        "*.kt",
+        "*.java"
+      ],
+      "text": "Make suspend functions safe to call from the main thread: move blocking work, such as disk or network access, off it with `withContext` and a dispatcher passed in to the class. Do not hardcode `Dispatchers.IO`, so tests can swap the dispatcher."
+    },
+    {
+      "id": "R-ARDUINO-001",
+      "stack": "arduino",
+      "status": "proposed",
+      "paths": [
+        "*.ino",
+        "*.c",
+        "*.cpp",
+        "*.h",
+        "*.hpp"
+      ],
+      "text": "Keep an interrupt handler short and fast, with no waiting: `delay()` does not work inside one and `millis()` stops counting. Declare every variable it shares with the main program `volatile`."
+    },
+    {
+      "id": "R-ARDUINO-002",
+      "stack": "arduino",
+      "status": "proposed",
+      "paths": [
+        "*.ino",
+        "*.c",
+        "*.cpp",
+        "*.h",
+        "*.hpp",
+        "*platformio.ini"
+      ],
+      "text": "Never write Wi-Fi passwords, API keys or device credentials into source files. Keep them in an untracked file, such as a `secrets.h` listed in `.gitignore`, or pass them in as build flags."
+    },
+    {
+      "id": "R-DOTNET-001",
+      "stack": "dotnet",
+      "status": "proposed",
+      "paths": [
+        "*.cs"
+      ],
+      "text": "Await tasks. Never block on one with `.Result` or `.Wait()`; make the calling method `async` instead."
+    },
+    {
+      "id": "R-DOTNET-002",
+      "stack": "dotnet",
+      "status": "proposed",
+      "paths": [
+        "*.cs",
+        "*.csproj"
+      ],
+      "text": "Keep nullable reference types on (`<Nullable>enable</Nullable>`) and fix their warnings. Never silence one with the `!` operator unless the code has already checked the value."
+    },
+    {
+      "id": "R-ELECTRON-001",
+      "stack": "electron",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx",
+        "*.mjs",
+        "*.cjs"
+      ],
+      "text": "Keep `contextIsolation` and `sandbox` on, and `nodeIntegration` off, in every `BrowserWindow` and webview. Never flip one of them to make a feature work."
+    },
+    {
+      "id": "R-ELECTRON-002",
+      "stack": "electron",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx",
+        "*.mjs",
+        "*.cjs"
+      ],
+      "text": "In a preload script, expose only named functions through `contextBridge`. Never expose `ipcRenderer` or any other Electron API itself to the page."
+    },
+    {
+      "id": "R-ELECTRON-003",
+      "stack": "electron",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx",
+        "*.mjs",
+        "*.cjs"
+      ],
+      "text": "In the main process, check the `sender` of every IPC message and validate its arguments before you act on them."
+    },
     {
       "id": "R-EXPO-001",
       "stack": "expo",
@@ -111,6 +327,62 @@
       "text": "Run `npx expo-doctor` after you change dependencies or the app config, and fix what it reports before you call the step done."
     },
     {
+      "id": "R-GODOT-001",
+      "stack": "godot",
+      "status": "proposed",
+      "paths": [
+        "*.gd"
+      ],
+      "text": "Give variables, parameters and return values static types in GDScript, such as `var speed: float = 200.0` and `func hit(damage: int) -> void:`."
+    },
+    {
+      "id": "R-GODOT-002",
+      "stack": "godot",
+      "status": "proposed",
+      "paths": [
+        "*.gd"
+      ],
+      "text": "Put movement and physics code in `_physics_process(delta)`, which runs at a fixed rate, not in `_process(delta)`."
+    },
+    {
+      "id": "R-GODOT-003",
+      "stack": "godot",
+      "status": "proposed",
+      "paths": [
+        "*.gd",
+        "*.tscn"
+      ],
+      "text": "Design scenes with no dependencies on where they are placed. A child tells its parent what happened with a signal; it does not reach up or across the tree with long `get_node()` paths."
+    },
+    {
+      "id": "R-GRADLE-001",
+      "stack": "gradle",
+      "status": "proposed",
+      "paths": [
+        "*build.gradle",
+        "*build.gradle.kts",
+        "*settings.gradle*",
+        "*gradle.properties",
+        "*gradle-wrapper.properties",
+        "*libs.versions.toml"
+      ],
+      "text": "Run Gradle through the project's wrapper, `./gradlew`, never a `gradle` installed on the machine, so every build uses the Gradle version the project chose."
+    },
+    {
+      "id": "R-GRADLE-002",
+      "stack": "gradle",
+      "status": "proposed",
+      "paths": [
+        "*build.gradle",
+        "*build.gradle.kts",
+        "*settings.gradle*",
+        "*gradle.properties",
+        "*gradle-wrapper.properties",
+        "*libs.versions.toml"
+      ],
+      "text": "If the project has `gradle/libs.versions.toml`, declare dependencies and their versions there, and refer to them from build files. Do not write a version inline in a build file."
+    },
+    {
       "id": "R-NEXT-001",
       "stack": "nextjs",
       "status": "proposed",
@@ -141,6 +413,17 @@
         "*/app/*"
       ],
       "text": "Fetch data in Server Components where you can, and pass it down as props. In a Client Component, read a promise passed from the server with `use`, or use the data library the project already has, such as SWR or React Query. Do not write your own fetching in an effect."
+    },
+    {
+      "id": "R-PIO-001",
+      "stack": "platformio",
+      "status": "proposed",
+      "paths": [
+        "*platformio.ini",
+        "src/*",
+        "*/src/*"
+      ],
+      "text": "Declare libraries in `lib_deps` in `platformio.ini`, each with a version. Build and test with `pio run` and `pio test` for the board you changed, using `-e <environment>`."
     },
     {
       "id": "R-PY-001",
@@ -272,6 +555,72 @@
       "text": "Render a long or growing list with `FlatList` or `SectionList`, which render only the rows on screen. Never render one with `.map()` inside a `ScrollView`."
     },
     {
+      "id": "R-RUST-001",
+      "stack": "rust",
+      "status": "proposed",
+      "paths": [
+        "*.rs"
+      ],
+      "text": "In library code and in code that handles input, return a `Result` instead of calling `unwrap()`, `expect()` or `panic!`. Keep `unwrap()` for tests and for cases that cannot fail, with a comment that says why."
+    },
+    {
+      "id": "R-RUST-002",
+      "stack": "rust",
+      "status": "proposed",
+      "paths": [
+        "*.rs",
+        "*Cargo.toml"
+      ],
+      "text": "Before you call a step done, run `cargo clippy` and `cargo test`, and fix the warnings clippy reports."
+    },
+    {
+      "id": "R-SWIFT-001",
+      "stack": "swift",
+      "status": "proposed",
+      "paths": [
+        "*.swift"
+      ],
+      "text": "Update the UI only on the main actor. Mark view models and other UI state `@MainActor`, and never change the UI from a background task."
+    },
+    {
+      "id": "R-SWIFT-002",
+      "stack": "swift",
+      "status": "proposed",
+      "paths": [
+        "*.swift"
+      ],
+      "text": "In app code, never force-unwrap an optional with `!` or call a throwing function with `try!`: either one crashes the app when it fails. Use `if let`, `guard let` or `??`, and `do`/`catch` or `try?`. Tests may force-unwrap."
+    },
+    {
+      "id": "R-SWIFT-003",
+      "stack": "swift",
+      "status": "proposed",
+      "paths": [
+        "*.swift",
+        "*Info.plist"
+      ],
+      "text": "Before code uses a protected resource, such as the camera, location or contacts, add that resource's purpose string (`NS...UsageDescription`) to `Info.plist`. Without it, access fails and the app may crash."
+    },
+    {
+      "id": "R-TAURI-001",
+      "stack": "tauri",
+      "status": "proposed",
+      "paths": [
+        "*src-tauri/capabilities/*",
+        "*tauri.conf.json*"
+      ],
+      "text": "Grant each window only the permissions it needs, in a capability file under `src-tauri/capabilities/`. Never widen a scope, such as file system access, beyond what the feature uses."
+    },
+    {
+      "id": "R-TAURI-002",
+      "stack": "tauri",
+      "status": "proposed",
+      "paths": [
+        "*.rs"
+      ],
+      "text": "A Tauri command that can fail returns a `Result` whose error the frontend can show; it never panics. Validate every argument that comes from the frontend."
+    },
+    {
       "id": "R-TS-001",
       "stack": "typescript",
       "status": "proposed",
@@ -314,6 +663,34 @@
         "*bun.lock"
       ],
       "text": "Install packages with the package manager whose lockfile the project has: `package-lock.json` means npm, `pnpm-lock.yaml` pnpm, `yarn.lock` Yarn, and `bun.lock` Bun. Commit the lockfile change with the dependency change, and ask before adding a dependency (R-CODE-006)."
+    },
+    {
+      "id": "R-UNITY-001",
+      "stack": "unity",
+      "status": "proposed",
+      "paths": [
+        "Assets/*",
+        "*/Assets/*"
+      ],
+      "text": "Move or rename assets inside the Unity Editor. If you must do it on disk, move or rename the asset's `.meta` file with it: the `.meta` file holds the ID that every reference to the asset uses."
+    },
+    {
+      "id": "R-UNITY-002",
+      "stack": "unity",
+      "status": "proposed",
+      "paths": [
+        "*.cs"
+      ],
+      "text": "Never search for objects, such as with `GameObject.Find`, in `Update` or other code that runs every frame. Look the reference up once, in `Awake` or `Start`, and keep it in a field."
+    },
+    {
+      "id": "R-UNITY-003",
+      "stack": "unity",
+      "status": "proposed",
+      "paths": [
+        "*.cs"
+      ],
+      "text": "Apply forces and other `Rigidbody` changes in `FixedUpdate`, not in `Update`, so physics stays the same at any frame rate."
     }
   ]
 }

@@ -1,0 +1,13 @@
+date,case,variant,run,pass,cost_usd
+2026-10-13,core-heavy-file-guard,with,1,1,0.00720471
+2026-10-13,core-heavy-file-guard,with,2,1,0.01787853
+2026-10-13,core-heavy-file-guard,with,3,1,0.00533661
+2026-10-13,core-heavy-file-guard,without,1,1,0.00535328
+2026-10-13,core-heavy-file-guard,without,2,1,0.00463767
+2026-10-13,core-heavy-file-guard,without,3,1,0.005423600000000001
+2026-10-13,stacks-python-encoding,with,1,1,0.00466594
+2026-10-13,stacks-python-encoding,with,2,1,0.00464932
+2026-10-13,stacks-python-encoding,with,3,1,0.00473947
+2026-10-13,stacks-python-encoding,without,1,1,0.00399634
+2026-10-13,stacks-python-encoding,without,2,1,0.00403846
+2026-10-13,stacks-python-encoding,without,3,1,0.004537660000000001

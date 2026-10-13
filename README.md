@@ -14,6 +14,7 @@ The director decides what becomes a rule; agents propose. `CHARTER.md` says who 
 | `registry/` | Every rule with its source and status, the stacks, and the pool of candidate tips |
 | `intel/` | The weekly scout: its instructions, sources, inbox and digest |
 | `audits/`, `metrics/` | The monthly audit's instructions and reports, and the factory's measures over time |
+| `evals/` | Eval cases, the monthly eval budget, and a ledger of every run |
 | `scripts/` | The factory's checks and tools |
 
 ## Start a project
@@ -68,6 +69,13 @@ doing, from its own commits and progress files.
 On the first Monday of each month the auditor follows `audits/auditor.md`: it runs
 `scripts/audit.rb` and `scripts/metrics.sh --record`, writes `audits/<date>.md` with proposals, and
 opens a draft pull request. It proposes; the director decides every rule's status.
+
+## Evals
+
+An eval runs a small task headless, three times with a plugin and three times without it, and
+checks the result. That difference is the evidence a rule needs to become active, and the ablation a
+deprecation needs (`CHARTER.md`). `scripts/eval.sh` records every run's pass and cost in
+`evals/ledger.csv` and stops before the month passes the ceiling in `evals/budget.json`.
 
 ## Change the factory
 

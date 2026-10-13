@@ -17,8 +17,9 @@ request. Follow `AGENTS.md` (F1 to F11). You propose; the director decides every
    - A source that no longer loads: find where the page moved and fix the rule's `sources`
      yourself. If it is gone, propose a replacement source or retiring the rule.
    - A rule past its review date: propose keeping it with a new `review_by`, or deprecating it.
-     Deprecation needs a trigger plus an ablation (`CHARTER.md`). Until the director sets the
-     eval budget, write "needs an eval" instead of running one.
+     Deprecation needs a trigger plus an ablation (`CHARTER.md`): name the eval case in
+     `evals/cases/` that would show it, or say that one needs writing. Do not run evals here; they
+     run on pull requests that change a plugin (`AGENTS.md` F12).
    - An audit trigger from the scout: say which rules it affects and what you propose for each.
    - A rule on trial for more than one month: propose active, keep on trial, or retire, from the
      evidence in its registry entry and in the projects' reports the director has shared.

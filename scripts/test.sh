@@ -22,6 +22,8 @@ run "sdlc-stacks hook" bash plugins/sdlc-stacks/tests/run.sh
 run "intel inbox, digest and state" ruby scripts/check-intel.rb
 run "the audit report builds" ruby scripts/audit.rb
 run "the factory metrics run" bash scripts/metrics.sh
+run "eval cases are well formed and their checks work" bash evals/tests.sh
+run "the eval runner plans within the budget" bash scripts/eval.sh --dry-run
 
 # A project pulls the factory's rules itself, with sdlc-update (projects pull; CHARTER.md).
 sdlc_update() {

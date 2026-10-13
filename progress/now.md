@@ -1,14 +1,10 @@
 # Now
 
-Updated 2026-10-13. `bash scripts/test.sh` passes (19 checks).
+Updated 2026-10-13. `bash scripts/test.sh` passes.
 
-All four phases are built. Open pull requests, merge in this order, all against `main`: #4 (stacks
-engine and TypeScript web), #5 (the other stacks), #6 (the scout, propagation, audits, metrics).
-The first scout run and the first audit are in `intel/inbox/2026-10-13.md` and
-`audits/2026-10-13.md`. A fresh project boots on 11,023 bytes.
-
-The scout and audit routines exist; both first fire on Monday 2026-10-19, at 09:07 and 10:07
-Asia/Saigon. They read their instructions from `main`, so #4 to #6 must be merged first.
+All four phases are built and on `main` (#1 to #6). The first scout run and the first audit are in
+`intel/inbox/2026-10-13.md` and `audits/2026-10-13.md`. A fresh project boots on 11,023 bytes.
+The scout and audit routines first fire on Monday 2026-10-19, at 09:07 and 10:07 Asia/Saigon.
 
 Next action: after 2026-10-19, read the first routine runs (`RemoteTrigger list_runs`) and fix
 what they stumbled on. Evals wait on the director's ceiling (`progress/waiting.md`).

@@ -1079,7 +1079,9 @@
     commits itself, and nothing was reviewed. Trial B: when the builder ended blocked, the main
     session checked the builder's code by hand and made the S1 commit itself. Trial C, with this rule
     in the template and a Haiku main session: it handed the code to the builder unasked, but still
-    wrote the steps itself and re-ran the builder's checks when the builder was blocked.
+    wrote the steps itself and re-ran the builder's checks when the builder was blocked. Trial D,
+    interactive, the director's Haiku 4.5 main session with the rule and the state card in context:
+    no role agent ran; it wrote the step, the code and the tests, and committed to main.
   checked_on:
   checked_at:
   review_by: 2027-01-31

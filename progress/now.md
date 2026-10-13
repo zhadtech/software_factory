@@ -4,12 +4,12 @@ Updated 2026-10-13. `bash scripts/test.sh` passes (11 checks).
 
 Branch `phase2-sdlc-lean` (pull request #2, on top of #1) holds the `sdlc-lean` plugin, a README,
 `scripts/new-project.sh`, and proposed rule R-TEAM-003 (hand each step to its role).
-Three headless trials ran on 2026-10-13; R-TEAM-003's evidence says what each showed. Headless runs
-cannot finish a builder step: background roles cannot ask for permission there.
+Four trials ran on 2026-10-13, the last one interactive; R-TEAM-003's evidence says what each
+showed. In none did the main session call a role unless the request named it.
 
-Next action: the director runs one interactive trial in a fresh project made with
-`scripts/new-project.sh`, with a plain request and no role names. Watch whether product writes
-the steps and whether the main session stays out of role work. Then pick the first stack playbook.
+Next action: wait for the director's answer on enforcing R-TEAM-003 with an sdlc-core hook that
+stops the main session from writing code or committing when roles are configured. Also add a
+check of plan/queue.json against its schema: trial D wrote goal for title and tier feature.
 
 | Phase | State |
 |---|---|

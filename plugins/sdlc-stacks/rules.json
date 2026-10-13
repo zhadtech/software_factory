@@ -1,0 +1,227 @@
+{
+  "generated": "From registry/stacks.yaml and registry/rules.yaml by scripts/build-stacks.rb. Do not edit by hand.",
+  "stacks": [
+    {
+      "id": "python",
+      "title": "Python",
+      "markers": []
+    },
+    {
+      "id": "typescript",
+      "title": "TypeScript",
+      "markers": [
+        {
+          "file": "*tsconfig.json"
+        }
+      ]
+    },
+    {
+      "id": "react",
+      "title": "React",
+      "markers": [
+        {
+          "file": "*package.json",
+          "contains": "\"react\""
+        }
+      ]
+    },
+    {
+      "id": "nextjs",
+      "title": "Next.js",
+      "markers": [
+        {
+          "file": "*next.config.*"
+        },
+        {
+          "file": "*package.json",
+          "contains": "\"next\""
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "id": "R-NEXT-001",
+      "stack": "nextjs",
+      "status": "proposed",
+      "paths": [
+        "app/*",
+        "*/app/*"
+      ],
+      "text": "In the App Router, pages and layouts are Server Components by default. Add `\"use client\"` only to the component that needs state, event handlers, effects or browser APIs, as far down the tree as you can, never to a whole page or layout."
+    },
+    {
+      "id": "R-NEXT-002",
+      "stack": "nextjs",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx",
+        "*.env*",
+        "*next.config.*"
+      ],
+      "text": "Only environment variables named `NEXT_PUBLIC_...` reach the browser, and their values are built into the JavaScript bundle. Never give a secret that prefix. Read secrets only in server code, and start each module that reads one with `import 'server-only'`."
+    },
+    {
+      "id": "R-NEXT-003",
+      "stack": "nextjs",
+      "status": "proposed",
+      "paths": [
+        "app/*",
+        "*/app/*"
+      ],
+      "text": "Fetch data in Server Components where you can, and pass it down as props. In a Client Component, read a promise passed from the server with `use`, or use the data library the project already has, such as SWR or React Query. Do not write your own fetching in an effect."
+    },
+    {
+      "id": "R-PY-001",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py",
+        "pyproject.toml",
+        "requirements*.txt"
+      ],
+      "text": "Run Python and its tools through the project's environment: `uv run`, the virtual environment's own `python`, or `python -m <tool>`. Never install packages into the system Python with a bare `pip install`."
+    },
+    {
+      "id": "R-PY-002",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "pyproject.toml",
+        "requirements*.txt",
+        "setup.py",
+        "setup.cfg"
+      ],
+      "text": "Declare a dependency in the file the project already uses, `pyproject.toml` or a requirements file, never only in an install command. Ask before adding one (R-CODE-006)."
+    },
+    {
+      "id": "R-PY-003",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py"
+      ],
+      "text": "Open text files with an explicit encoding, such as `open(path, encoding=\"utf-8\")`. Python's default encoding depends on the platform and its locale."
+    },
+    {
+      "id": "R-PY-004",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py"
+      ],
+      "text": "Catch the specific exceptions you expect, such as `OSError` or `ValueError`. Never write a bare `except:`, and never catch `Exception` only to pass."
+    },
+    {
+      "id": "R-PY-005",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py"
+      ],
+      "text": "Pass `subprocess` commands as a list of arguments. Never use `shell=True` with text you did not write yourself."
+    },
+    {
+      "id": "R-PY-006",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*test_*.py",
+        "*_test.py",
+        "*conftest.py",
+        "tests/*",
+        "*/tests/*"
+      ],
+      "text": "Run tests with the runner the project already uses, `python -m pytest` or `python -m unittest`, from the project root. Name test files `test_*.py`, and keep them where the project keeps its tests."
+    },
+    {
+      "id": "R-REACT-001",
+      "stack": "react",
+      "status": "proposed",
+      "paths": [
+        "*.tsx",
+        "*.jsx",
+        "use*.ts",
+        "*/use*.ts"
+      ],
+      "text": "Call hooks only at the top level of a component or a custom hook: never inside a condition, a loop or a nested function, and never after an early return. Name a custom hook `use` followed by a capital letter, such as `useCart`."
+    },
+    {
+      "id": "R-REACT-002",
+      "stack": "react",
+      "status": "proposed",
+      "paths": [
+        "*.tsx",
+        "*.jsx"
+      ],
+      "text": "Give each item in a rendered list a `key` that comes from the data, such as an ID. Never use the array index as the key when items can be added, removed or reordered."
+    },
+    {
+      "id": "R-REACT-003",
+      "stack": "react",
+      "status": "proposed",
+      "paths": [
+        "*.tsx",
+        "*.jsx"
+      ],
+      "text": "Do not use an effect to compute values from props or state, or to respond to a user event. Compute such values during render, and handle events in their handlers. Use effects only to sync with something outside React."
+    },
+    {
+      "id": "R-REACT-004",
+      "stack": "react",
+      "status": "proposed",
+      "paths": [
+        "*.tsx",
+        "*.jsx",
+        "use*.ts",
+        "*/use*.ts"
+      ],
+      "text": "Never change state or props in place. Make a new object or array, such as `{ ...user, name }` or `[...items, item]`, and pass it to the setter."
+    },
+    {
+      "id": "R-TS-001",
+      "stack": "typescript",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx",
+        "*tsconfig*.json"
+      ],
+      "text": "Run the project's type check, its `typecheck` script or `tsc --noEmit`, before you call a step done. Never loosen `tsconfig.json`, such as turning off `strict`, to make errors go away."
+    },
+    {
+      "id": "R-TS-002",
+      "stack": "typescript",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "text": "Never silence a type error with `any`, `@ts-ignore` or a `!` non-null assertion. Use `unknown` and narrow it, or fix the type. If a suppression is truly needed, use `// @ts-expect-error` with the reason on the same line."
+    },
+    {
+      "id": "R-TS-003",
+      "stack": "typescript",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "text": "Treat data from outside the program, such as JSON from the network, files, environment variables and user input, as `unknown`, and check its shape before you use it. A type assertion with `as` checks nothing at runtime."
+    },
+    {
+      "id": "R-TS-004",
+      "stack": "typescript",
+      "status": "proposed",
+      "paths": [
+        "*package.json",
+        "*package-lock.json",
+        "*pnpm-lock.yaml",
+        "*yarn.lock",
+        "*bun.lock"
+      ],
+      "text": "Install packages with the package manager whose lockfile the project has: `package-lock.json` means npm, `pnpm-lock.yaml` pnpm, `yarn.lock` Yarn, and `bun.lock` Bun. Commit the lockfile change with the dependency change, and ask before adding a dependency (R-CODE-006)."
+    }
+  ]
+}

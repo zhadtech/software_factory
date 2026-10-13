@@ -1,0 +1,9 @@
+{
+  "name": "sdlc-stacks",
+  "version": "0.2.0",
+  "description": "Stack rules for many kinds of project. Each rule names the files it covers, and each stack names the files that identify it. The first time Claude touches a matching file in a session, a hook adds the rules that apply. Rules come from the factory's registry.",
+  "author": {
+    "name": "zhadtech"
+  },
+  "repository": "https://github.com/zhadtech/software_factory"
+}

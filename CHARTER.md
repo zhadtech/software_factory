@@ -66,6 +66,7 @@ that are not rules yet. `ruby scripts/check-registry.rb` proves the two agree.
 | `supersedes` | The rules this one replaces once it moves to trial or active. |
 | `text` | The rule as an agent reads it. |
 | `scope` | `all-projects`, a stack, or one project. |
+| `paths` | Stack rules only: the files the rule covers, such as `*.py`. Its `scope` is `stack:<id>`, a stack named in `registry/stacks.yaml`. |
 | `enforcement` | `prose`, `rule-file`, `hook`, `lint`, `ci` or `script`. |
 | `where` | The file that enforces it today. |
 | `sources` | Pool tips (`pool P47`), official URLs, or recorded incidents. At least one. |

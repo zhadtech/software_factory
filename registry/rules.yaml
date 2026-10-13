@@ -1089,3 +1089,325 @@
   review_by: 2027-01-31
   status: trial
   owner: director
+
+- id: R-PY-001
+  title: Run Python inside the project's environment
+  text: >-
+    Run Python and its tools through the project's environment: `uv run`, the virtual
+    environment's own `python`, or `python -m <tool>`. Never install packages into the system
+    Python with a bare `pip install`.
+  scope: [stack:python]
+  paths: ["*.py", "pyproject.toml", "requirements*.txt"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.python.org/3/library/venv.html
+    - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+    - https://peps.python.org/pep-0668/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-002
+  title: Declare dependencies where the project already does
+  text: >-
+    Declare a dependency in the file the project already uses, `pyproject.toml` or a
+    requirements file, never only in an install command. Ask before adding one (R-CODE-006).
+  scope: [stack:python]
+  paths: ["pyproject.toml", "requirements*.txt", "setup.py", "setup.cfg"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-003
+  title: Open text files with an explicit encoding
+  text: >-
+    Open text files with an explicit encoding, such as `open(path, encoding="utf-8")`. Python's
+    default encoding depends on the platform and its locale.
+  scope: [stack:python]
+  paths: ["*.py"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://peps.python.org/pep-0597/
+    - "Lean team trial D, 2026-10-13: a fresh template project with the sdlc-lean plugin"
+  evidence: "Trial D's word counter read its input with open(file_path, 'r'), so its result depended on the machine's locale."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-004
+  title: Catch the exceptions you expect
+  text: >-
+    Catch the specific exceptions you expect, such as `OSError` or `ValueError`. Never write a
+    bare `except:`, and never catch `Exception` only to pass.
+  scope: [stack:python]
+  paths: ["*.py"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://peps.python.org/pep-0008/#programming-recommendations
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-005
+  title: Pass subprocess commands as a list
+  text: >-
+    Pass `subprocess` commands as a list of arguments. Never use `shell=True` with text you did
+    not write yourself.
+  scope: [stack:python]
+  paths: ["*.py"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.python.org/3/library/subprocess.html#security-considerations
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-006
+  title: Run tests with the project's runner
+  text: >-
+    Run tests with the runner the project already uses, `python -m pytest` or
+    `python -m unittest`, from the project root. Name test files `test_*.py`, and keep them where
+    the project keeps its tests.
+  scope: [stack:python]
+  paths: ["*test_*.py", "*_test.py", "*conftest.py", "tests/*", "*/tests/*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.pytest.org/en/stable/explanation/goodpractices.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-TS-001
+  title: Keep the type check strict and passing
+  text: >-
+    Run the project's type check, its `typecheck` script or `tsc --noEmit`, before you call a step
+    done. Never loosen `tsconfig.json`, such as turning off `strict`, to make errors go away.
+  scope: [stack:typescript]
+  paths: ["*.ts", "*.tsx", "*tsconfig*.json"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://www.typescriptlang.org/tsconfig/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-TS-002
+  title: Fix type errors instead of silencing them
+  text: >-
+    Never silence a type error with `any`, `@ts-ignore` or a `!` non-null assertion. Use `unknown`
+    and narrow it, or fix the type. If a suppression is truly needed, use `// @ts-expect-error` with
+    the reason on the same line.
+  scope: [stack:typescript]
+  paths: ["*.ts", "*.tsx"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://www.typescriptlang.org/docs/handbook/2/narrowing.html
+    - https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-TS-003
+  title: Check outside data at runtime
+  text: >-
+    Treat data from outside the program, such as JSON from the network, files, environment variables
+    and user input, as `unknown`, and check its shape before you use it. A type assertion with `as`
+    checks nothing at runtime.
+  scope: [stack:typescript]
+  paths: ["*.ts", "*.tsx"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-TS-004
+  title: Use the project's package manager
+  text: >-
+    Install packages with the package manager whose lockfile the project has: `package-lock.json`
+    means npm, `pnpm-lock.yaml` pnpm, `yarn.lock` Yarn, and `bun.lock` Bun. Commit the lockfile
+    change with the dependency change, and ask before adding a dependency (R-CODE-006).
+  scope: [stack:typescript]
+  paths: ["*package.json", "*package-lock.json", "*pnpm-lock.yaml", "*yarn.lock", "*bun.lock"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.npmjs.com/cli/v10/configuring-npm/package-lock-json
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-REACT-001
+  title: Call hooks only at the top level
+  text: >-
+    Call hooks only at the top level of a component or a custom hook: never inside a condition, a
+    loop or a nested function, and never after an early return. Name a custom hook `use` followed by
+    a capital letter, such as `useCart`.
+  scope: [stack:react]
+  paths: ["*.tsx", "*.jsx", "use*.ts", "*/use*.ts"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://react.dev/reference/rules/rules-of-hooks
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-REACT-002
+  title: Give list items stable keys
+  text: >-
+    Give each item in a rendered list a `key` that comes from the data, such as an ID. Never use the
+    array index as the key when items can be added, removed or reordered.
+  scope: [stack:react]
+  paths: ["*.tsx", "*.jsx"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://react.dev/learn/rendering-lists
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-REACT-003
+  title: Compute during render, not in an effect
+  text: >-
+    Do not use an effect to compute values from props or state, or to respond to a user event.
+    Compute such values during render, and handle events in their handlers. Use effects only to sync
+    with something outside React.
+  scope: [stack:react]
+  paths: ["*.tsx", "*.jsx"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://react.dev/learn/you-might-not-need-an-effect
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-REACT-004
+  title: Never mutate state or props
+  text: >-
+    Never change state or props in place. Make a new object or array, such as `{ ...user, name }` or
+    `[...items, item]`, and pass it to the setter.
+  scope: [stack:react]
+  paths: ["*.tsx", "*.jsx", "use*.ts", "*/use*.ts"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://react.dev/learn/updating-objects-in-state
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-NEXT-001
+  title: Keep Client Components small
+  text: >-
+    In the App Router, pages and layouts are Server Components by default. Add `"use client"` only
+    to the component that needs state, event handlers, effects or browser APIs, as far down the tree
+    as you can, never to a whole page or layout.
+  scope: [stack:nextjs]
+  paths: ["app/*", "*/app/*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://nextjs.org/docs/app/getting-started/server-and-client-components
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-NEXT-002
+  title: Keep secrets on the server
+  text: >-
+    Only environment variables named `NEXT_PUBLIC_...` reach the browser, and their values are built
+    into the JavaScript bundle. Never give a secret that prefix. Read secrets only in server code,
+    and start each module that reads one with `import 'server-only'`.
+  scope: [stack:nextjs]
+  paths: ["*.ts", "*.tsx", "*.env*", "*next.config.*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://nextjs.org/docs/app/guides/environment-variables
+    - https://nextjs.org/docs/app/getting-started/server-and-client-components
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-NEXT-003
+  title: Fetch data on the server first
+  text: >-
+    Fetch data in Server Components where you can, and pass it down as props. In a Client Component,
+    read a promise passed from the server with `use`, or use the data library the project already
+    has, such as SWR or React Query. Do not write your own fetching in an effect.
+  scope: [stack:nextjs]
+  paths: ["app/*", "*/app/*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://nextjs.org/docs/app/getting-started/fetching-data
+    - https://react.dev/learn/you-might-not-need-an-effect
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director

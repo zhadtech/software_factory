@@ -16,3 +16,7 @@
 - 2026-10-13 · The lean roles keep their model and effort defaults until a trial shows a role needs a change · `plugins/sdlc-lean/agents/`
 - 2026-10-13 · R-TEAM-003 moves to trial, enforced by the sdlc-core role-work guard (the director: "yes, enforce it with the hook") · `registry/rules.yaml`
 - 2026-10-13 · The reviewer checks tier M and L steps only; tier S steps skip review · `plugins/sdlc-lean/agents/product.md`
+- 2026-10-13 · Stacks are dynamic: one `sdlc-stacks` plugin holds every stack, and marker files decide which stacks are on in a project · `registry/stacks.yaml`
+- 2026-10-13 · Stack rules reach projects through a plugin hook, since Claude Code does not load rules files from plugins · `plugins/sdlc-stacks/`
+- 2026-10-13 · The charter's registry fields gain `paths`, for stack rules (the director: yes) · `CHARTER.md`
+- 2026-10-13 · The factory does not use fog_of_war to choose its stacks or as a source for their rules

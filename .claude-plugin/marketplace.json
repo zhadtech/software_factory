@@ -14,6 +14,11 @@
       "name": "sdlc-lean",
       "source": "./plugins/sdlc-lean",
       "description": "The five-role lean team: product, architect, builder, reviewer and release, each with its own model, effort and tool limits"
+    },
+    {
+      "name": "sdlc-stacks",
+      "source": "./plugins/sdlc-stacks",
+      "description": "Stack rules, added the first time Claude touches a file they cover. Python, TypeScript, React and Next.js so far; one stack is added at a time"
     }
   ]
 }

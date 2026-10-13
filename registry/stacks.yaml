@@ -1,0 +1,28 @@
+# Stacks that the sdlc-stacks plugin knows. Rules for a stack live in rules.yaml with
+# scope [stack:<id>] and a paths list; scripts/build-stacks.rb writes them into the plugin.
+#
+# A stack is on in a project when any of its markers matches a project file. A marker is a file
+# pattern where * also matches across folders, plus an optional `contains`: text the file must hold.
+# A stack with no markers is on wherever its rules' paths match.
+
+- id: python
+  title: Python
+  markers: []
+
+- id: typescript
+  title: TypeScript
+  markers:
+    - file: "*tsconfig.json"
+
+- id: react
+  title: React
+  markers:
+    - file: "*package.json"
+      contains: '"react"'
+
+- id: nextjs
+  title: Next.js
+  markers:
+    - file: "*next.config.*"
+    - file: "*package.json"
+      contains: '"next"'

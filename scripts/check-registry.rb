@@ -24,6 +24,17 @@ tips = pool_lines.filter_map { |l| l[/\A(\d+)\. /, 1]&.to_i }
 problems << "pool.md: no numbered tips found" if tips.empty?
 problems << "pool.md: tips must be numbered 1 to #{tips.size} with no gaps" unless tips == (1..tips.size).to_a
 
+stacks = YAML.safe_load_file(File.join(ROOT, "registry/stacks.yaml"))
+abort "registry/stacks.yaml: expected a list of stacks" unless stacks.is_a?(Array)
+stack_ids = stacks.map { |s| s["id"] }
+stack_ids.tally.each { |id, n| problems << "stacks.yaml: #{id} listed #{n} times" if n > 1 }
+stacks.each do |s|
+  problems << "stacks.yaml: #{s['id'].inspect} needs an id and a title" unless s["id"].is_a?(String) && s["title"].is_a?(String)
+  Array(s["markers"]).each do |m|
+    problems << "stacks.yaml: #{s['id']} has a marker without a file pattern" unless m.is_a?(Hash) && m["file"].is_a?(String)
+  end
+end
+
 ids = rules.map { |r| r["id"] }
 ids.tally.each { |id, n| problems << "#{id}: id used #{n} times" if n > 1 }
 legacy = rules.filter_map { |r| r["legacy_id"] }
@@ -44,6 +55,18 @@ rules.each do |r|
     next unless (n = s.to_s[/\Apool P(\d+)\z/, 1])
     next problems << "#{id}: cites pool P#{n}, which does not exist" unless tips.include?(n.to_i)
     cited[n.to_i] << id if IN_FORCE.include?(r["status"])
+  end
+  stack_scopes = Array(r["scope"]).grep(/\Astack:/)
+  stack_scopes.each do |sc|
+    problems << "#{id}: #{sc} is not a stack in registry/stacks.yaml" unless stack_ids.include?(sc.delete_prefix("stack:"))
+  end
+  if stack_scopes.any?
+    paths = r["paths"]
+    unless paths.is_a?(Array) && paths.any? && paths.all? { |p| p.is_a?(String) && !p.empty? }
+      problems << "#{id}: a stack rule needs paths, a list of file patterns"
+    end
+  elsif r.key?("paths")
+    problems << "#{id}: only stack rules have paths"
   end
   Array(r["supersedes"]).each do |old|
     problems << "#{id}: supersedes #{old}, which is not in the registry" unless ids.include?(old)

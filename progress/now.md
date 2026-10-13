@@ -5,12 +5,11 @@ Updated 2026-10-13. `bash scripts/test.sh` passes (12 checks).
 Branch `phase2-sdlc-lean` (pull request #2, on top of #1) holds the `sdlc-lean` plugin, a README,
 `scripts/new-project.sh`, and R-TEAM-003 (hand each step to its role), now on trial and enforced
 by the sdlc-core 0.2.0 role-work guard. sdlc-core also checks plan/queue.json against its schema.
-Four trials ran on 2026-10-13, the last one interactive; R-TEAM-003's evidence says what each
-showed. In none did the main session call a role unless the request named it.
+Five trials ran on 2026-10-13; R-TEAM-003's evidence says what each showed. In trial E, interactive and
+with the guard, the main session handed the work to product and builder unasked.
 
-Next action: the director runs one more interactive trial in a fresh project made with
-`scripts/new-project.sh`, with a plain request. A headless check on 2026-10-13 showed the guard
-blocking the main session from writing code while product and builder wrote their files.
+Next action: wait for the director's answer in progress/waiting.md on which steps get a review,
+then set it in product's instructions. After that, pick the first stack playbook.
 
 | Phase | State |
 |---|---|

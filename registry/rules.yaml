@@ -1081,7 +1081,9 @@
     in the template and a Haiku main session: it handed the code to the builder unasked, but still
     wrote the steps itself and re-ran the builder's checks when the builder was blocked. Trial D,
     interactive, the director's Haiku 4.5 main session with the rule and the state card in context:
-    no role agent ran; it wrote the step, the code and the tests, and committed to main.
+    no role agent ran; it wrote the step, the code and the tests, and committed to main. Trial E,
+    interactive, the same Haiku 4.5 setup with the role-work guard in sdlc-core 0.2.0: it handed the
+    request to product and S1 to the builder unasked, and the guard never had to deny a call.
   checked_on:
   checked_at:
   review_by: 2027-01-31

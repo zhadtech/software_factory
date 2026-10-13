@@ -21,7 +21,7 @@ export CLAUDE_PROJECT_DIR="$P"
 hook() { printf '%s' "$2" | bash "$S/$1"; }
 
 # Without .claude/sdlc.json every hook is a no-op.
-for h in state-card.sh guard-heavy-files.sh trim-output.sh budget-check.sh check-handoff.sh snapshot-state.sh; do
+for h in state-card.sh guard-heavy-files.sh guard-role-work.sh trim-output.sh budget-check.sh check-queue.sh check-handoff.sh snapshot-state.sh; do
   out=$(hook "$h" '{"tool_input":{"file_path":"'"$P"'/package-lock.json"},"agent_type":"builder"}'; echo "exit $?")
   check "$h is a no-op without config" [ "$out" = "exit 0" ]
 done
@@ -141,6 +141,71 @@ out=$(hook check-handoff.sh '{"agent_type":"Explore","last_assistant_message":"F
 check "handoff check ignores agents not listed" empty "$out"
 out=$(hook check-handoff.sh '{"agent_type":"builder","stop_hook_active":true,"last_assistant_message":"x"}')
 check "handoff check never loops" empty "$out"
+
+# role-work guard (R-TEAM-003)
+deny='"permissionDecision": "deny"'
+write() { printf '{"tool_name":"%s","tool_input":{"file_path":"%s"}%s}' "$1" "$2" "${3:+,\"agent_type\":\"$3\"}"; }
+run() { printf '{"tool_name":"Bash","tool_input":{"command":"%s"}%s}' "$1" "${2:+,\"agent_type\":\"$2\"}"; }
+out=$(hook guard-role-work.sh "$(write Write "$P/src/fog.ts")")
+check "role guard denies the main session writing code" has "$out" "$deny"
+check "role guard names the rule" has "$out" "R-TEAM-003"
+check "role guard names the next ready step" has "$out" "Next ready step: S2 · builder"
+out=$(hook guard-role-work.sh "$(write Edit "$P/plan/steps/S5.md")")
+check "role guard leaves step files to product" has "$out" "$deny"
+out=$(hook guard-role-work.sh '{"tool_name":"NotebookEdit","tool_input":{"notebook_path":"'"$P"'/a.ipynb"}}')
+check "role guard denies a notebook edit" has "$out" "$deny"
+for f in progress/now.md progress/waiting.md plan/queue.json; do
+  out=$(hook guard-role-work.sh "$(write Write "$P/$f")")
+  check "role guard lets the main session write $f" empty "$out"
+done
+out=$(hook guard-role-work.sh "$(write Write /tmp/notes.md)")
+check "role guard ignores files outside the project" empty "$out"
+out=$(hook guard-role-work.sh "$(write Write "$P/src/fog.ts" sdlc-lean:builder)")
+check "role guard lets a role agent write code" empty "$out"
+for c in "git commit -m x" "git add -A && git commit -qm x" "git -C /tmp/r commit"; do
+  out=$(hook guard-role-work.sh "$(run "$c")")
+  check "role guard denies the main session: $c" has "$out" "$deny"
+done
+for c in "git status" "echo git commit" "git log --grep=commit"; do
+  out=$(hook guard-role-work.sh "$(run "$c")")
+  check "role guard allows the main session: $c" empty "$out"
+done
+out=$(hook guard-role-work.sh "$(run "git commit -m x" builder)")
+check "role guard lets a role agent commit" empty "$out"
+cp .claude/sdlc.json "$P/sdlc.bak"
+jq 'del(.handoff_agents) | .main_session_writes = ["src/*"]' "$P/sdlc.bak" > .claude/sdlc.json
+out=$(hook guard-role-work.sh "$(write Write "$P/lib/a.ts")")
+check "role guard is off without handoff_agents" empty "$out"
+jq '.main_session_writes = ["src/*"]' "$P/sdlc.bak" > .claude/sdlc.json
+out=$(hook guard-role-work.sh "$(write Write "$P/src/fog.ts")")
+check "main_session_writes widens what the main session may write" empty "$out"
+out=$(hook guard-role-work.sh "$(write Write "$P/progress/now.md")")
+check "main_session_writes replaces the default list" has "$out" "$deny"
+mv "$P/sdlc.bak" .claude/sdlc.json
+
+# queue check
+queue_input='{"tool_input":{"file_path":"'"$P"'/plan/queue.json"}}'
+out=$(hook check-queue.sh "$queue_input")
+check "queue check passes a valid queue" empty "$out"
+cp plan/queue.json "$P/queue.bak"
+cat > plan/queue.json <<'JSON'
+{ "next_id": 2, "steps": [
+  { "id": "S1", "goal": "Word counter", "owner": "builder", "tier": "feature", "verify": "npm test" },
+  { "id": "step-2", "title": "ok", "owner": "builder", "tier": "S", "status": "ready", "verify": "npm test" }
+] }
+JSON
+out=$(hook check-queue.sh "$queue_input")
+check "queue check blocks a bad queue" has "$out" '"decision": "block"'
+check "queue check names a missing field" has "$out" "S1: missing title"
+check "queue check names an unknown field" has "$out" "S1: unknown field goal"
+check "queue check names a bad value" has "$out" 'S1: tier is \"feature\"; it must be one of S, M, L'
+check "queue check names a bad id" has "$out" "step-2: id is"
+printf '{ "next_id": 1, "steps": [' > plan/queue.json
+out=$(hook check-queue.sh "$queue_input")
+check "queue check reports broken JSON" has "$out" "could not be read"
+out=$(hook check-queue.sh '{"tool_input":{"file_path":"'"$P"'/progress/now.md"}}')
+check "queue check ignores other files" empty "$out"
+mv "$P/queue.bak" plan/queue.json
 
 # compaction snapshot
 echo change >> progress/waiting.md

@@ -2,6 +2,7 @@
   "director": "the director",
   "trim_lines": 120,
   "handoff_agents": ["product", "architect", "builder", "reviewer", "release"],
+  "main_session_writes": ["progress/*", "plan/queue.json"],
   "heavy_files": [
     "package-lock.json", "*/package-lock.json", "yarn.lock", "pnpm-lock.yaml",
     "node_modules/*", "*/node_modules/*", "*/Pods/*", "build/*", "dist/*", "docs/archive/*"

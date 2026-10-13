@@ -13,3 +13,6 @@
 - 2026-10-13 · The planning blueprint is updated to version 2 with these answers
 - 2026-10-13 · Agents may push work branches and open draft pull requests in the factory without asking; the director merges · `AGENTS.md` F1
 - 2026-10-13 · The factory holds nothing about one project: `recommendations/` is removed, and private links are removed from all history
+- 2026-10-13 · The lean roles keep their model and effort defaults until a trial shows a role needs a change · `plugins/sdlc-lean/agents/`
+- 2026-10-13 · R-TEAM-003 moves to trial, enforced by the sdlc-core role-work guard (the director: "yes, enforce it with the hook") · `registry/rules.yaml`
+- 2026-10-13 · The reviewer checks tier M and L steps only; tier S steps skip review · `plugins/sdlc-lean/agents/product.md`

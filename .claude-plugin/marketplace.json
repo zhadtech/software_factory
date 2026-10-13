@@ -8,7 +8,12 @@
     {
       "name": "sdlc-core",
       "source": "./plugins/sdlc-core",
-      "description": "Hooks that keep sessions cheap and resumable: state card, heavy-read guard, output trimmer, size budgets, handoff check, compaction snapshot"
+      "description": "Hooks that keep sessions cheap and resumable: state card, heavy-read guard, role-work guard, output trimmer, size budgets, queue check, handoff check, compaction snapshot"
+    },
+    {
+      "name": "sdlc-lean",
+      "source": "./plugins/sdlc-lean",
+      "description": "The five-role lean team: product, architect, builder, reviewer and release, each with its own model, effort and tool limits"
     }
   ]
 }

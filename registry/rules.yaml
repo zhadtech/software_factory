@@ -1058,3 +1058,34 @@
   review_by: 2027-01-31
   status: proposed
   owner: director
+
+- id: R-TEAM-003
+  title: Hand each step to the role that owns it
+  text: >-
+    When the next step's owner is a role agent (product, architect, builder, reviewer or release),
+    hand the step to that agent with its step id. A request with no step goes to product first.
+    The main session does no role work: it does not write the code, run a role's checks or commit
+    for a role. When a role ends blocked, put its OPEN question to the director, then resume the
+    same role. Handing a step to its owner is not the delegation R-CTX-008 limits.
+  scope: [all-projects]
+  enforcement: hook
+  where: plugins/sdlc-core/scripts/guard-role-work.sh
+  sources:
+    - https://code.claude.com/docs/en/sub-agents
+    - "Lean team trial A, 2026-10-13: a fresh template project with the sdlc-lean plugin"
+    - "Lean team trial B, 2026-10-13: the same, with each role named in the request"
+  evidence: >-
+    Trial A: given a plain request, the main session wrote the steps, the code and all three
+    commits itself, and nothing was reviewed. Trial B: when the builder ended blocked, the main
+    session checked the builder's code by hand and made the S1 commit itself. Trial C, with this rule
+    in the template and a Haiku main session: it handed the code to the builder unasked, but still
+    wrote the steps itself and re-ran the builder's checks when the builder was blocked. Trial D,
+    interactive, the director's Haiku 4.5 main session with the rule and the state card in context:
+    no role agent ran; it wrote the step, the code and the tests, and committed to main. Trial E,
+    interactive, the same Haiku 4.5 setup with the role-work guard in sdlc-core 0.2.0: it handed the
+    request to product and S1 to the builder unasked, and the guard never had to deny a call.
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: trial
+  owner: director

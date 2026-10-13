@@ -16,14 +16,15 @@ $(printf '%s\n' "$out" | tail -20)"
 run "registry" ruby scripts/check-registry.rb
 run "AGENTS.md template is generated from the registry" ruby scripts/build-agents-md.rb --check
 run "sdlc-core hooks" bash plugins/sdlc-core/tests/run.sh
+run "sdlc-lean agents" bash plugins/sdlc-lean/tests/run.sh
 run "template budget.sh matches sdlc-budget" cmp plugins/sdlc-core/bin/sdlc-budget templates/project/scripts/budget.sh
 
 template_smoke() {
   local d
   d=$(mktemp -d) || return 1
-  cp -R templates/project/. "$d/"
+  bash scripts/new-project.sh "$d" >/dev/null || return 1
   (
-    cd "$d" && git init -q -b main . && git add -A &&
+    cd "$d" && [ -z "$(git status --porcelain)" ] &&
       out=$(scripts/verify.sh) && printf '%s\n' "$out" | grep -q '^budget: pass' &&
       [ "$(printf '%s\n' "$out" | tail -1)" = "verify: pass" ] && grep -q '^pass ' .verify/last-result &&
       jq -e '.steps == []' plan/queue.json >/dev/null &&

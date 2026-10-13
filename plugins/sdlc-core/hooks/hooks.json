@@ -1,15 +1,17 @@
 {
-  "description": "sdlc-core: state card, heavy-read guard, output trimmer, size budgets, handoff check, compaction snapshot",
+  "description": "sdlc-core: state card, heavy-read guard, role-work guard, output trimmer, size budgets, queue check, handoff check, compaction snapshot",
   "hooks": {
     "SessionStart": [
       { "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/state-card.sh" }] }
     ],
     "PreToolUse": [
-      { "matcher": "Read", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/guard-heavy-files.sh" }] }
+      { "matcher": "Read", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/guard-heavy-files.sh" }] },
+      { "matcher": "Write|Edit|NotebookEdit|Bash", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/guard-role-work.sh" }] }
     ],
     "PostToolUse": [
       { "matcher": "Bash", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/trim-output.sh" }] },
-      { "matcher": "Edit|Write", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/budget-check.sh" }] }
+      { "matcher": "Edit|Write", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/budget-check.sh" },
+        { "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/check-queue.sh" }] }
     ],
     "SubagentStop": [
       { "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/check-handoff.sh" }] }

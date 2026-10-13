@@ -21,3 +21,7 @@
 - 2026-10-13 · The charter's registry fields gain `paths`, for stack rules (the director: yes) · `CHARTER.md`
 - 2026-10-13 · The factory does not use fog_of_war to choose its stacks or as a source for their rules
 - 2026-10-13 · "Studios" in the director's list of app types is read as studio-built apps: .NET (Visual Studio) and Unity each get a stack
+- 2026-10-13 · New projects auto-update the factory's plugins (the template turns on `autoUpdate` for its marketplace); rules in a project's AGENTS.md change only when the project runs `sdlc-update` · `templates/project/.claude/settings.json`
+- 2026-10-13 · Boot cost means the bytes of CLAUDE.md, AGENTS.md, the state card and the lean roles' descriptions in a fresh template project: 11,023 on 2026-10-13 · `scripts/metrics.sh`
+- 2026-10-13 · The digest's pinned page is `intel/digest.md` on GitHub; the audit runs on the first Monday of each month, after the scout · `audits/auditor.md`
+- 2026-10-13 · Create the scout (Mondays 09:07) and audit (first Monday 10:07) routines, Asia/Saigon time (the director: "yes, create the routines"); blocked on GitHub repo access

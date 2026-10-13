@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Run inside a project: how its process is doing, from its own records.
+#   sdlc-metrics           one line per measure
+#   sdlc-metrics --csv     a header line and one row, for keeping a history
+# Steps come from commits with a Step: trailer (R-PLAN-006). Boot is the bytes a cold session
+# reads before its first step: CLAUDE.md, AGENTS.md and the sdlc-core state card.
+set -u
+command -v jq >/dev/null 2>&1 || { echo "sdlc-metrics needs jq" >&2; exit 2; }
+here="$(cd "$(dirname "$0")" && pwd)"
+
+steps=$(git log --format='%(trailers:key=Step,valueonly,separator=%x2C)%x09%(trailers:key=Tier,valueonly,separator=%x2C)%x09%(trailers:key=Verify,valueonly,separator=%x2C)%x09%(trailers:key=Open,valueonly,separator=%x2C)%x09%ct' 2>/dev/null |
+  awk -F'\t' '$1 != ""')
+count() { [ -n "$steps" ] && printf '%s\n' "$steps" | awk -F'\t' "$1" | wc -l | tr -d ' ' || echo 0; }
+since=$(($(date +%s) - 28 * 86400))
+done_all=$(count '1')
+done_28=$(count "\$5 >= $since")
+tier_s=$(count '$2 == "S"') tier_m=$(count '$2 == "M"') tier_l=$(count '$2 == "L"')
+no_verify=$(count '$3 == "" || tolower($3) ~ /^none/')
+open=$(count '$4 != "" && tolower($4) !~ /^(none|no)$/')
+waiting=$(grep -cE '^([0-9]+\.|-) ' progress/waiting.md 2>/dev/null); waiting=${waiting:-0}
+dead=$(grep -cE '^- ' progress/dead-ends.md 2>/dev/null); dead=${dead:-0}
+card=$(printf '{"source":"startup"}' | CLAUDE_PROJECT_DIR=$PWD bash "$here/../scripts/state-card.sh" 2>/dev/null | wc -c | tr -d ' ')
+boot=$(( $(cat CLAUDE.md AGENTS.md 2>/dev/null | wc -c) + card ))
+
+if [ "${1:-}" = --csv ]; then
+  echo "date,steps,steps_28d,tier_s,tier_m,tier_l,steps_without_verify,steps_with_open,waiting,dead_ends,boot_bytes"
+  echo "$(date +%F),$done_all,$done_28,$tier_s,$tier_m,$tier_l,$no_verify,$open,$waiting,$dead,$boot"
+  exit 0
+fi
+echo "steps done: $done_all ($done_28 in the last 28 days)"
+echo "by tier: S $tier_s, M $tier_m, L $tier_l"
+echo "steps whose commit names no verify command: $no_verify"
+echo "steps that left an open question: $open"
+echo "questions waiting on the director: $waiting"
+echo "dead ends recorded: $dead"
+echo "boot: $boot bytes before the first step (CLAUDE.md, AGENTS.md and the state card)"

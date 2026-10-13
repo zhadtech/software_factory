@@ -19,6 +19,24 @@ run "sdlc-core hooks" bash plugins/sdlc-core/tests/run.sh
 run "sdlc-lean agents" bash plugins/sdlc-lean/tests/run.sh
 run "stack rules are generated from the registry" ruby scripts/build-stacks.rb --check
 run "sdlc-stacks hook" bash plugins/sdlc-stacks/tests/run.sh
+run "intel inbox, digest and state" ruby scripts/check-intel.rb
+run "the audit report builds" ruby scripts/audit.rb
+run "the factory metrics run" bash scripts/metrics.sh
+
+# A project pulls the factory's rules itself, with sdlc-update (projects pull; CHARTER.md).
+sdlc_update() {
+  local d
+  d=$(mktemp -d) || return 1
+  bash scripts/new-project.sh "$d/p" >/dev/null || return 1
+  (
+    cd "$d/p" && sed -i.bak '/^\*\*R-CODE-002\./d' AGENTS.md && rm AGENTS.md.bak &&
+      out=$("$OLDPWD/plugins/sdlc-core/bin/sdlc-update" --from "$OLDPWD") &&
+      printf '%s\n' "$out" | grep -q '^rules: AGENTS.md updated' && grep -q '^\*\*R-CODE-002\.' AGENTS.md &&
+      printf '%s\n' "$out" | grep -q '^template: matches'
+  ) || { echo "sdlc-update did not restore the rules block in $d"; return 1; }
+  rm -rf "$d"
+}
+run "a project pulls the factory's rules with sdlc-update" sdlc_update
 run "template budget.sh matches sdlc-budget" cmp plugins/sdlc-core/bin/sdlc-budget templates/project/scripts/budget.sh
 
 template_smoke() {

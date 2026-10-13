@@ -79,6 +79,8 @@ out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/docs/archive
 check "guard denies a nested archive read" has "$out" "docs/archive/v0.1/plan.md"
 out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/package-lock.json","offset":1,"limit":40}}')
 check "guard allows a line-range read" empty "$out"
+out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/package-lock.json","allow_large":true}}')
+check "guard denies a whole read even with allow_large (Claude Code 2.1.296)" has "$out" '"permissionDecision": "deny"'
 out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/src/app.ts"}}')
 check "guard allows an ordinary file" empty "$out"
 out=$(printf '%s' '{"tool_input":{"file_path":"'"$P"'/package-lock.json"}}' | ALLOW_HEAVY_READ=1 bash "$S/guard-heavy-files.sh")
@@ -206,6 +208,24 @@ check "queue check reports broken JSON" has "$out" "could not be read"
 out=$(hook check-queue.sh '{"tool_input":{"file_path":"'"$P"'/progress/now.md"}}')
 check "queue check ignores other files" empty "$out"
 mv "$P/queue.bak" plan/queue.json
+
+# sdlc-metrics: steps come from commit trailers.
+git commit -q --allow-empty -m "S5 work" -m "Step: S5
+Tier: S
+Verify: npm test -> 12 passed
+Open: none"
+git commit -q --allow-empty -m "S6 work" -m "Step: S6
+Tier: M
+Verify: none
+Open: should errors exit 1?"
+out=$("$B/sdlc-metrics")
+check "sdlc-metrics counts steps from trailers" has "$out" "steps done: 2 (2 in the last 28 days)"
+check "sdlc-metrics counts steps by tier" has "$out" "by tier: S 1, M 1, L 0"
+check "sdlc-metrics counts steps with no verify command" has "$out" "steps whose commit names no verify command: 1"
+check "sdlc-metrics counts steps with an open question" has "$out" "steps that left an open question: 1"
+check "sdlc-metrics measures boot bytes" has "$out" "bytes before the first step"
+out=$("$B/sdlc-metrics" --csv)
+check "sdlc-metrics --csv prints a header and one row" [ "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" = 2 ]
 
 # compaction snapshot
 echo change >> progress/waiting.md

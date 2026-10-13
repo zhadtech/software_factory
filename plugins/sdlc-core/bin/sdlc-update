@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Run inside a project to pull the factory's latest rules. The factory never writes to projects;
+# projects pull (CHARTER.md).
+#   sdlc-update [--from <factory folder>]
+# Rewrites the factory rules block in AGENTS.md from the factory's registry, keeping the statuses
+# the project chose in the block's header. Then lists, without changing them, the template files
+# where this project differs from the factory's template. Review the result with git diff.
+# The factory folder defaults to the marketplace copy Claude Code keeps under ~/.claude/plugins.
+set -u
+factory="${CLAUDE_CODE_PLUGIN_CACHE_DIR:-$HOME/.claude/plugins}/marketplaces/software-factory"
+if [ "${1:-}" = --from ]; then
+  [ -n "${2:-}" ] || { echo "usage: sdlc-update [--from <factory folder>]" >&2; exit 2; }
+  factory=$2
+fi
+[ -f "$factory/scripts/build-agents-md.rb" ] || {
+  echo "no factory at $factory; refresh the marketplace with /plugin, or pass --from <factory folder>" >&2
+  exit 2
+}
+[ -f AGENTS.md ] || { echo "run sdlc-update from the project root, where AGENTS.md is" >&2; exit 2; }
+command -v ruby >/dev/null 2>&1 || { echo "sdlc-update needs ruby" >&2; exit 2; }
+
+before=$(cksum <AGENTS.md)
+ruby "$factory/scripts/build-agents-md.rb" AGENTS.md >/dev/null || exit 1
+if [ "$(cksum <AGENTS.md)" = "$before" ]; then
+  echo "rules: up to date"
+else
+  echo "rules: AGENTS.md updated; review with git diff AGENTS.md"
+fi
+
+template="$factory/templates/project"
+drift=""
+for f in scripts/budget.sh scripts/quiet-run.sh; do
+  cmp -s "$f" "$template/$f" 2>/dev/null || drift="$drift
+  $f differs from the factory's copy: cp \"$template/$f\" $f"
+done
+if [ -f .claude/sdlc.json ] && command -v jq >/dev/null 2>&1; then
+  for k in $(jq -r 'keys[]' "$template/.claude/sdlc.json"); do
+    jq -e --arg k "$k" 'has($k)' .claude/sdlc.json >/dev/null || drift="$drift
+  .claude/sdlc.json has no \"$k\"; the factory's template sets it"
+  done
+  for p in $(jq -r '.enabledPlugins // {} | keys[]' "$template/.claude/settings.json"); do
+    jq -e --arg p "$p" '.enabledPlugins // {} | has($p)' .claude/settings.json >/dev/null 2>&1 || drift="$drift
+  .claude/settings.json does not enable $p"
+  done
+fi
+if [ -n "$drift" ]; then
+  echo "template: differences to review, nothing changed:$drift"
+else
+  echo "template: matches the factory's"
+fi

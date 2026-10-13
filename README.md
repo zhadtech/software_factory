@@ -12,6 +12,8 @@ The director decides what becomes a rule; agents propose. `CHARTER.md` says who 
 | `plugins/sdlc-stacks/` | Stack rules, added the first time Claude touches a file they cover. Each stack is identified by marker files, so one project can mix stacks |
 | `templates/project/` | Starting files for a project: rules, settings, budgets, queue, progress files, quiet verify |
 | `registry/` | Every rule with its source and status, the stacks, and the pool of candidate tips |
+| `intel/` | The weekly scout: its instructions, sources, inbox and digest |
+| `audits/`, `metrics/` | The monthly audit's instructions and reports, and the factory's measures over time |
 | `scripts/` | The factory's checks and tools |
 
 ## Start a project
@@ -44,6 +46,28 @@ cd ~/trial-project && claude --plugin-dir ~/path/to/software_factory/plugins
 
 `--plugin-dir` pointed at `plugins/` loads every plugin in it, for that session only. These local
 copies replace any installed copies with the same names.
+
+## The weekly scout
+
+Each Monday the scout reads the Claude Code changelog, the Claude platform release notes and the
+other sources in `intel/sources.yaml`. It writes what matters to `intel/inbox/<date>.md`, adds a
+section to `intel/digest.md`, and opens a draft pull request with any changes it proposes.
+Pin `intel/digest.md` on GitHub to read the latest week. To run it by hand, start Claude Code in
+this repo and say: "Follow intel/scout.md."
+
+## Keep a project up to date
+
+The factory's plugins update themselves, because the template turns on auto-update for its
+marketplace. Rules in a project's `AGENTS.md` do not: run `sdlc-update` in the project to pull them,
+review `git diff AGENTS.md`, and commit. It also lists, without changing them, the template files
+where the project differs from the factory's. `sdlc-metrics` reports how the project's process is
+doing, from its own commits and progress files.
+
+## Audits and metrics
+
+On the first Monday of each month the auditor follows `audits/auditor.md`: it runs
+`scripts/audit.rb` and `scripts/metrics.sh --record`, writes `audits/<date>.md` with proposals, and
+opens a draft pull request. It proposes; the director decides every rule's status.
 
 ## Change the factory
 

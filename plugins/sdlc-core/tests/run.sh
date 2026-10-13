@@ -79,6 +79,8 @@ out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/docs/archive
 check "guard denies a nested archive read" has "$out" "docs/archive/v0.1/plan.md"
 out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/package-lock.json","offset":1,"limit":40}}')
 check "guard allows a line-range read" empty "$out"
+out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/package-lock.json","allow_large":true}}')
+check "guard denies a whole read even with allow_large (Claude Code 2.1.296)" has "$out" '"permissionDecision": "deny"'
 out=$(hook guard-heavy-files.sh '{"tool_input":{"file_path":"'"$P"'/src/app.ts"}}')
 check "guard allows an ordinary file" empty "$out"
 out=$(printf '%s' '{"tool_input":{"file_path":"'"$P"'/package-lock.json"}}' | ALLOW_HEAVY_READ=1 bash "$S/guard-heavy-files.sh")

@@ -12,8 +12,11 @@ Rules for any agent changing this repo. Read once at session start, then read
 | `progress/decisions.md` | One line per decision the director made, dated | Before reopening a settled question |
 | `CHARTER.md` | Decision rights, the seven starting decisions, registry fields, rule lifecycle | Before you propose a rule or a status change |
 | `registry/rules.yaml` | Every rule, active or not | Changing or citing a rule. Read one entry, not the file |
-| `registry/pool.md` | 145 candidate tips (P1 to P145) | Promoting a tip. Read line ranges only |
+| `registry/pool.md` | Numbered candidate tips (P1 onward); the scout adds new ones under section 13 | Promoting a tip. Read line ranges only |
 | `scripts/test.sh` | Every factory check in one run | Before every commit |
+| `intel/scout.md` | The weekly scout's instructions; `intel/sources.yaml` lists what it reads | Running or changing the scout |
+| `intel/digest.md` | What the scout found, newest week first; one inbox file per run in `intel/inbox/` | Reading what changed this week |
+| `scripts/check-intel.rb` | Checks the inbox files, the digest and `intel/state.json` | After a scout run |
 | `scripts/new-project.sh` | Starts a project from the template in a new folder | Making a trial project |
 | `.claude/hooks/guard-main.sh` | Blocks agent pushes to `main`, force pushes and merges | A guard blocks a command you think is fine |
 | `scripts/check-registry.rb` | Registry check | After any change under `registry/` |

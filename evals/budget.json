@@ -1,0 +1,6 @@
+{
+  "monthly_usd": 20,
+  "runs_per_case": 3,
+  "max_usd_per_run": 1.5,
+  "note": "One long session a month (the director, 2026-10-13). Costs are what claude -p reports as total_cost_usd; on a Claude plan they use plan usage, not money."
+}

@@ -14,6 +14,7 @@ The director decides what becomes a rule; agents propose. `CHARTER.md` says who 
 | `registry/` | Every rule with its source and status, the stacks, and the pool of candidate tips |
 | `intel/` | The weekly scout: its instructions, sources, inbox and digest |
 | `audits/`, `metrics/` | The monthly audit's instructions and reports, and the factory's measures over time |
+| `evals/` | Eval cases, the monthly eval budget, and a ledger of every run |
 | `scripts/` | The factory's checks and tools |
 
 ## Start a project
@@ -24,9 +25,14 @@ bash scripts/new-project.sh ~/my-project
 
 This copies the template into a new folder, makes it a git repo on `main`, and commits the
 starting files. Open the folder in Claude Code and trust it. Claude Code then fetches the
-factory's marketplace in the background and turns on the two plugins that `.claude/settings.json`
+factory's marketplace in the background and turns on the three plugins that `.claude/settings.json`
 names. If they are missing in that first session, run `/reload-plugins`. Each person needs read
 access to this repo on GitHub.
+
+Start each request for the role agents with `/sdlc-lean:team`, for example
+`/sdlc-lean:team Add a word counter with tests`. Claude Code starts sub-agents only when you ask,
+and this command is how you ask. Product writes the steps, the builder builds them, and the
+reviewer checks the medium and large ones.
 
 The template's verify script checks size budgets only. Add the project's own stages, such as
 tests and type checks, to `scripts/verify.sh`.
@@ -68,6 +74,13 @@ doing, from its own commits and progress files.
 On the first Monday of each month the auditor follows `audits/auditor.md`: it runs
 `scripts/audit.rb` and `scripts/metrics.sh --record`, writes `audits/<date>.md` with proposals, and
 opens a draft pull request. It proposes; the director decides every rule's status.
+
+## Evals
+
+An eval runs a small task headless, three times with a plugin and three times without it, and
+checks the result. That difference is the evidence a rule needs to become active, and the ablation a
+deprecation needs (`CHARTER.md`). `scripts/eval.sh` records every run's pass and cost in
+`evals/ledger.csv` and stops before the month passes the ceiling in `evals/budget.json`.
 
 ## Change the factory
 

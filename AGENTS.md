@@ -20,6 +20,7 @@ Rules for any agent changing this repo. Read once at session start, then read
 | `audits/auditor.md` | The monthly audit's instructions; each audit is `audits/<date>.md` | Running or changing the audit |
 | `scripts/audit.rb` | The audit's facts: review dates, unchecked and waiting rules, scout triggers, broken sources | Before proposing a status change |
 | `scripts/metrics.sh` | Boot bytes of a fresh project and the size of the rule set; `--record` adds a row to `metrics/factory.csv` | Checking a change did not raise the boot cost |
+| `evals/` | Eval cases (`cases/`), the monthly budget, and `ledger.csv`, one row per run; `scripts/eval.sh` runs them | Changing a plugin, or proving a rule helps |
 | `scripts/new-project.sh` | Starts a project from the template in a new folder | Making a trial project |
 | `.claude/hooks/guard-main.sh` | Blocks agent pushes to `main`, force pushes and merges | A guard blocks a command you think is fine |
 | `scripts/check-registry.rb` | Registry check | After any change under `registry/` |
@@ -57,10 +58,15 @@ plugin change only when the version changes. `scripts/test.sh` checks this again
 the plugin file, then copy it over.
 **F11.** Never change another project's files, fog_of_war included. The factory publishes plugins
 and templates; projects adopt them. Notes about one project belong in that project, not here.
+**F12.** A pull request that changes a plugin runs `bash scripts/eval.sh --changed`, commits the new
+rows in `evals/ledger.csv`, and quotes the summary in its description. The runner never spends past
+`evals/budget.json`; when the month's budget is spent, say so in the pull request instead.
 
 ## Commands
 
 - All checks: `bash scripts/test.sh`
+- Evals: `bash scripts/eval.sh --dry-run` shows what would run and the budget left; `--changed` runs
+  the cases for the plugins this branch changes
 - Validate a plugin by hand: `claude plugin validate plugins/sdlc-core` (the desktop app keeps its binary at `$CLAUDE_CODE_EXECPATH`)
 - Try the plugin in a project without installing it: `claude --plugin-dir plugins/sdlc-core`
 - Read one rule: `rg -n -B1 -A15 '^  legacy_id: R17$' registry/rules.yaml`

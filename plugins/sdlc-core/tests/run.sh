@@ -174,6 +174,22 @@ for c in "git status" "echo git commit" "git log --grep=commit"; do
 done
 out=$(hook guard-role-work.sh "$(run "git commit -m x" builder)")
 check "role guard lets a role agent commit" empty "$out"
+# Shell writes: > , >> and tee into project files count; heredoc bodies and quoted text do not.
+sh_in() { jq -n --arg c "$1" --arg a "${2:-}" '{tool_name: "Bash", tool_input: {command: $c}} + (if $a == "" then {} else {agent_type: $a} end)'; }
+nl='
+'
+for c in "cat > src/app.py <<'EOF'${nl}print(1 > 0)${nl}EOF" "echo hi >> src/a.ts" "printf x | tee lib/x.py" \
+  "cd src && echo 1 > a.txt" "jq . plan/queue.json > plan/steps/S9.md" "echo x >$P/src/abs.ts"; do
+  out=$(hook guard-role-work.sh "$(sh_in "$c")")
+  check "role guard denies a shell write: ${c%%$nl*}" has "$out" "from the shell"
+done
+for c in "echo note >> progress/now.md" "npm test 2>/dev/null" "ls > /tmp/out.txt" 'echo "a > b"' "echo oops >&2" \
+  "python3 - <<'EOF'${nl}if a > b: print(1)${nl}EOF" "jq . plan/queue.json > \$TMPDIR/q.json" "echo x > $P/progress/now.md"; do
+  out=$(hook guard-role-work.sh "$(sh_in "$c")")
+  check "role guard allows: ${c%%$nl*}" empty "$out"
+done
+out=$(hook guard-role-work.sh "$(sh_in "echo hi > src/a.ts" builder)")
+check "role guard lets a role agent write from the shell" empty "$out"
 cp .claude/sdlc.json "$P/sdlc.bak"
 jq 'del(.handoff_agents) | .main_session_writes = ["src/*"]' "$P/sdlc.bak" > .claude/sdlc.json
 out=$(hook guard-role-work.sh "$(write Write "$P/lib/a.ts")")

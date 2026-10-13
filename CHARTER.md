@@ -33,7 +33,7 @@ so each answer below is the recommended one. Change any of them by editing this 
 | How often does the scout run? | Weekly, Monday 09:07 the director's local time. | Phase 3 |
 | Where does the director read the weekly digest? | A pinned web page plus the pull request list. A Trello card is optional. | Phase 3 |
 | Is the five-role lean team the default for new projects? | Yes. The 13-role team is opt-in, for projects that need an audit trail. | Phase 2 |
-| How much may evals spend each month? | Evals run only on pull requests that touch a plugin, three runs per case, under a monthly ceiling. Skipped for now on 2026-10-13, so evals wait. | Phase 2 |
+| How much may evals spend each month? | Evals run only on pull requests that touch a plugin, three runs per case, under a monthly ceiling. The director set it on 2026-10-13 to one long session a month: $20 of the cost headless runs report (`evals/budget.json`). | Phase 2 |
 | Do scheduled jobs run as routines on the director's plan or as GitHub Actions on an API key? | Routines on the plan. Move to an API key only if routine usage gets tight. | Phase 3 |
 
 ## How projects get updates

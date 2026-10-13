@@ -37,9 +37,79 @@
           "contains": "\"next\""
         }
       ]
+    },
+    {
+      "id": "react-native",
+      "title": "React Native",
+      "markers": [
+        {
+          "file": "*package.json",
+          "contains": "\"react-native\""
+        }
+      ]
+    },
+    {
+      "id": "expo",
+      "title": "Expo",
+      "markers": [
+        {
+          "file": "*package.json",
+          "contains": "\"expo\""
+        },
+        {
+          "file": "*app.json",
+          "contains": "\"expo\""
+        }
+      ]
     }
   ],
   "rules": [
+    {
+      "id": "R-EXPO-001",
+      "stack": "expo",
+      "status": "proposed",
+      "paths": [
+        "*package.json"
+      ],
+      "text": "Add or upgrade a library with `npx expo install <package>`, which picks a version known to work with the project's React Native version. After changing dependencies, run `npx expo install --check` and fix what it reports."
+    },
+    {
+      "id": "R-EXPO-002",
+      "stack": "expo",
+      "status": "proposed",
+      "paths": [
+        "ios/*",
+        "android/*",
+        "*app.json",
+        "*app.config.*"
+      ],
+      "text": "If `ios/` and `android/` are listed in `.gitignore`, `npx expo prebuild` generates them from the app config, and the next `npx expo prebuild --clean` erases hand edits. Make native changes in `app.json`, `app.config.*` or a config plugin instead. If the project commits those folders, edit them directly."
+    },
+    {
+      "id": "R-EXPO-003",
+      "stack": "expo",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx",
+        "*.env*",
+        "*app.config.*"
+      ],
+      "text": "Only variables named `EXPO_PUBLIC_...` are built into the app, and anyone can read them from the installed app. Never put a secret, such as a private API key, in one. Keep secrets on a server."
+    },
+    {
+      "id": "R-EXPO-004",
+      "stack": "expo",
+      "status": "proposed",
+      "paths": [
+        "*package.json",
+        "*app.json",
+        "*app.config.*"
+      ],
+      "text": "Run `npx expo-doctor` after you change dependencies or the app config, and fix what it reports before you call the step done."
+    },
     {
       "id": "R-NEXT-001",
       "stack": "nextjs",
@@ -178,6 +248,28 @@
         "*/use*.ts"
       ],
       "text": "Never change state or props in place. Make a new object or array, such as `{ ...user, name }` or `[...items, item]`, and pass it to the setter."
+    },
+    {
+      "id": "R-RN-001",
+      "stack": "react-native",
+      "status": "proposed",
+      "paths": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
+      "text": "Handle a small platform difference with `Platform.OS` or `Platform.select`, and a large one with separate `.ios.tsx` and `.android.tsx` files. Check a change on both iOS and Android, or say which one you did not check."
+    },
+    {
+      "id": "R-RN-002",
+      "stack": "react-native",
+      "status": "proposed",
+      "paths": [
+        "*.tsx",
+        "*.jsx"
+      ],
+      "text": "Render a long or growing list with `FlatList` or `SectionList`, which render only the rows on screen. Never render one with `.map()` inside a `ScrollView`."
     },
     {
       "id": "R-TS-001",

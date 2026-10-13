@@ -26,3 +26,17 @@
     - file: "*next.config.*"
     - file: "*package.json"
       contains: '"next"'
+
+- id: react-native
+  title: React Native
+  markers:
+    - file: "*package.json"
+      contains: '"react-native"'
+
+- id: expo
+  title: Expo
+  markers:
+    - file: "*package.json"
+      contains: '"expo"'
+    - file: "*app.json"
+      contains: '"expo"'

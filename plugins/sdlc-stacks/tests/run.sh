@@ -95,6 +95,24 @@ printf '{}\n' >"$P/tsconfig.json"
 out=$(context "$(hook w7 Read src/index.ts)")
 check "outside git, markers are still found" has "$out" "R-TS-001"
 
+new_project expo-app
+printf '{}\n' >"$P/tsconfig.json"
+printf '{ "dependencies": { "expo": "~55.0.0", "react": "19.2.0", "react-native": "0.83.0" } }\n' >"$P/package.json"
+out=$(context "$(hook e1 Read app/index.tsx)")
+check "an Expo screen gets the TypeScript layer" has "$out" "R-TS-002"
+check "an Expo screen gets the React layer" has "$out" "R-REACT-002"
+check "an Expo screen gets the React Native layer" has "$out" "R-RN-002"
+check "an Expo screen gets the Expo layer" has "$out" "R-EXPO-003"
+check "an Expo app/ folder gets no Next.js rules" lacks "$out" "R-NEXT-"
+out=$(hook e2 Edit ios/App/AppDelegate.swift)
+check "a first edit in ios/ is denied with the prebuild rule" has "$out" "R-EXPO-002"
+
+new_project bare-rn
+printf '{ "dependencies": { "react": "19.2.0", "react-native": "0.83.0" } }\n' >"$P/package.json"
+out=$(context "$(hook e3 Read src/List.jsx)")
+check "a bare React Native app gets the React Native layer" has "$out" "R-RN-001"
+check "a bare React Native app gets no Expo rules" lacks "$out" "R-EXPO-"
+
 # Markers, with a rules file made for the test.
 export SDLC_STACKS_RULES="$T/rules.json"
 cat >"$SDLC_STACKS_RULES" <<'JSON'

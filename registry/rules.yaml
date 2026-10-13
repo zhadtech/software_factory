@@ -1089,3 +1089,116 @@
   review_by: 2027-01-31
   status: trial
   owner: director
+
+- id: R-PY-001
+  title: Run Python inside the project's environment
+  text: >-
+    Run Python and its tools through the project's environment: `uv run`, the virtual
+    environment's own `python`, or `python -m <tool>`. Never install packages into the system
+    Python with a bare `pip install`.
+  scope: [stack:python]
+  paths: ["*.py", "pyproject.toml", "requirements*.txt"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.python.org/3/library/venv.html
+    - https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
+    - https://peps.python.org/pep-0668/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-002
+  title: Declare dependencies where the project already does
+  text: >-
+    Declare a dependency in the file the project already uses, `pyproject.toml` or a
+    requirements file, never only in an install command. Ask before adding one (R-CODE-006).
+  scope: [stack:python]
+  paths: ["pyproject.toml", "requirements*.txt", "setup.py", "setup.cfg"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-003
+  title: Open text files with an explicit encoding
+  text: >-
+    Open text files with an explicit encoding, such as `open(path, encoding="utf-8")`. Python's
+    default encoding depends on the platform and its locale.
+  scope: [stack:python]
+  paths: ["*.py"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://peps.python.org/pep-0597/
+    - "Lean team trial D, 2026-10-13: a fresh template project with the sdlc-lean plugin"
+  evidence: "Trial D's word counter read its input with open(file_path, 'r'), so its result depended on the machine's locale."
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-004
+  title: Catch the exceptions you expect
+  text: >-
+    Catch the specific exceptions you expect, such as `OSError` or `ValueError`. Never write a
+    bare `except:`, and never catch `Exception` only to pass.
+  scope: [stack:python]
+  paths: ["*.py"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://peps.python.org/pep-0008/#programming-recommendations
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-005
+  title: Pass subprocess commands as a list
+  text: >-
+    Pass `subprocess` commands as a list of arguments. Never use `shell=True` with text you did
+    not write yourself.
+  scope: [stack:python]
+  paths: ["*.py"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.python.org/3/library/subprocess.html#security-considerations
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-PY-006
+  title: Run tests with the project's runner
+  text: >-
+    Run tests with the runner the project already uses, `python -m pytest` or
+    `python -m unittest`, from the project root. Name test files `test_*.py`, and keep them where
+    the project keeps its tests.
+  scope: [stack:python]
+  paths: ["*test_*.py", "*_test.py", "*conftest.py", "tests/*", "*/tests/*"]
+  enforcement: hook
+  where: plugins/sdlc-stacks/scripts/stack-rules.sh
+  sources:
+    - https://docs.pytest.org/en/stable/explanation/goodpractices.html
+  evidence:
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director

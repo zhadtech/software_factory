@@ -9,8 +9,9 @@ The director decides what becomes a rule; agents propose. `CHARTER.md` says who 
 |---|---|
 | `plugins/sdlc-core/` | Hooks that keep sessions cheap and resumable and keep role work with the roles: a state card at start, size budgets, a queue check, a handoff check |
 | `plugins/sdlc-lean/` | The five-role lean team: product, architect, builder, reviewer, release |
+| `plugins/sdlc-stacks/` | Stack rules, added the first time Claude touches a file they cover. Each stack is identified by marker files, so one project can mix stacks |
 | `templates/project/` | Starting files for a project: rules, settings, budgets, queue, progress files, quiet verify |
-| `registry/` | Every rule with its source and status, and the pool of candidate tips |
+| `registry/` | Every rule with its source and status, the stacks, and the pool of candidate tips |
 | `scripts/` | The factory's checks and tools |
 
 ## Start a project

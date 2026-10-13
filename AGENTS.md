@@ -18,9 +18,12 @@ Rules for any agent changing this repo. Read once at session start, then read
 | `.claude/hooks/guard-main.sh` | Blocks agent pushes to `main`, force pushes and merges | A guard blocks a command you think is fine |
 | `scripts/check-registry.rb` | Registry check | After any change under `registry/` |
 | `scripts/build-agents-md.rb` | Writes the rules block of the template AGENTS.md from the registry | After any rule change |
+| `scripts/build-stacks.rb` | Writes `plugins/sdlc-stacks/rules.json` from the registry | After any stack rule or stack change |
 | `.claude-plugin/marketplace.json` | The plugin catalog projects install from | Adding or renaming a plugin |
 | `plugins/sdlc-core/` | Hooks, `next-step`, `sdlc-budget`, queue schema; tests in `tests/run.sh` | Changing a hook |
 | `plugins/sdlc-lean/` | The five role agents: product, architect, builder, reviewer, release; tests in `tests/run.sh` | Changing a role |
+| `plugins/sdlc-stacks/` | The hook that adds stack rules near matching files, and its generated `rules.json`; tests in `tests/run.sh` | Changing how stack rules load |
+| `registry/stacks.yaml` | Each stack and the marker files that identify it | Adding a stack |
 | `templates/project/` | Starting files for a project: rules, settings, budgets, queue, progress files, quiet verify | Changing what a new project gets |
 | `seeds/agi-standards/`, `seeds/list-agents/` | The two old repos, with history | A step moves content out of them |
 

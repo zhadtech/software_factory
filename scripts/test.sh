@@ -17,6 +17,8 @@ run "registry" ruby scripts/check-registry.rb
 run "AGENTS.md template is generated from the registry" ruby scripts/build-agents-md.rb --check
 run "sdlc-core hooks" bash plugins/sdlc-core/tests/run.sh
 run "sdlc-lean agents" bash plugins/sdlc-lean/tests/run.sh
+run "stack rules are generated from the registry" ruby scripts/build-stacks.rb --check
+run "sdlc-stacks hook" bash plugins/sdlc-stacks/tests/run.sh
 run "template budget.sh matches sdlc-budget" cmp plugins/sdlc-core/bin/sdlc-budget templates/project/scripts/budget.sh
 
 template_smoke() {

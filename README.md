@@ -7,7 +7,7 @@ The director decides what becomes a rule; agents propose. `CHARTER.md` says who 
 
 | Path | What it is |
 |---|---|
-| `plugins/sdlc-core/` | Hooks that keep sessions cheap and resumable: a state card at start, size budgets, a handoff check |
+| `plugins/sdlc-core/` | Hooks that keep sessions cheap and resumable and keep role work with the roles: a state card at start, size budgets, a queue check, a handoff check |
 | `plugins/sdlc-lean/` | The five-role lean team: product, architect, builder, reviewer, release |
 | `templates/project/` | Starting files for a project: rules, settings, budgets, queue, progress files, quiet verify |
 | `registry/` | Every rule with its source and status, and the pool of candidate tips |

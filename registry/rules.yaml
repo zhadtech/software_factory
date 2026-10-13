@@ -1068,8 +1068,8 @@
     for a role. When a role ends blocked, put its OPEN question to the director, then resume the
     same role. Handing a step to its owner is not the delegation R-CTX-008 limits.
   scope: [all-projects]
-  enforcement: rule-file
-  where: templates/project/AGENTS.md
+  enforcement: hook
+  where: plugins/sdlc-core/scripts/guard-role-work.sh
   sources:
     - https://code.claude.com/docs/en/sub-agents
     - "Lean team trial A, 2026-10-13: a fresh template project with the sdlc-lean plugin"
@@ -1085,5 +1085,5 @@
   checked_on:
   checked_at:
   review_by: 2027-01-31
-  status: proposed
+  status: trial
   owner: director

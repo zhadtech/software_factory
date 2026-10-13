@@ -22,7 +22,7 @@ glob='def glob: "^" + (gsub("(?<c>[.+^$(){}|\\[\\]\\\\])"; "\\\(.c)") | gsub("[*
 # Which stacks are on, worked out once per session.
 if [ ! -f "$on" ]; then
   find "$state" -type f -mtime +7 -delete 2>/dev/null
-  (cd "$dir" && { git ls-files -co --exclude-standard 2>/dev/null || find . -type f -not -path './.git/*' | sed 's#^\./##'; }) |
+  (cd "$dir" && { git ls-files -co --exclude-standard 2>/dev/null || find . -type f -not -path './.git/*' -not -path '*/node_modules/*' | sed 's#^\./##'; }) |
     jq -R -s -r --slurpfile r "$rules" "$glob"'
       (split("\n") | map(select(. != ""))) as $files
       | $r[0].stacks[]

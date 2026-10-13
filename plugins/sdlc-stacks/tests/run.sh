@@ -50,6 +50,51 @@ check "a file outside the project gets nothing" empty "$out"
 out=$(hook s3 Read pyproject.toml)
 check "a pattern without * matches the file at the root" has "$(context "$out")" "R-PY-002"
 
+# The real web stacks. new_project <name> [git]: a fresh project in $P, a git repo unless told otherwise.
+new_project() { P="$T/$1" && mkdir -p "$P" && { [ "${2:-git}" = git ] && git -C "$P" init -q || true; }; }
+new_project next-app
+printf '{}\n' >"$P/tsconfig.json"
+printf '{ "dependencies": { "next": "16.4.0", "react": "19.2.0" } }\n' >"$P/package.json"
+out=$(context "$(hook w1 Read app/page.tsx)")
+check "a Next.js page gets the TypeScript rules" has "$out" "R-TS-002"
+check "a Next.js page gets the React rules" has "$out" "R-REACT-002"
+check "a Next.js page gets the Next.js rules" has "$out" "R-NEXT-001"
+check "a Next.js page gets no Python rules" lacks "$out" "R-PY-"
+out=$(context "$(hook w1b Read .env.local)")
+check "an env file gets the secrets rule" has "$out" "R-NEXT-002"
+out=$(context "$(hook w1c Read src/hooks/useCart.ts)")
+check "a custom hook file gets the hook rules" has "$out" "R-REACT-001"
+
+new_project vite-app
+printf '{}\n' >"$P/tsconfig.json"
+printf '{ "dependencies": { "react": "19.2.0", "react-dom": "19.2.0" } }\n' >"$P/package.json"
+out=$(context "$(hook w2 Read src/App.tsx)")
+check "a React app without Next.js gets the React rules" has "$out" "R-REACT-003"
+check "a React app without Next.js gets no Next.js rules" lacks "$out" "R-NEXT-"
+printf '{ "dependencies": { "react-dom": "19.2.0" } }\n' >"$P/package.json"
+out=$(context "$(hook w3 Read src/App.tsx)")
+check "react-dom alone does not count as react" lacks "$out" "R-REACT-"
+
+new_project no-tsconfig
+out=$(hook w4 Read src/index.ts)
+check "a .ts file without a tsconfig.json gets nothing" empty "$out"
+
+new_project mixed
+mkdir -p "$P/web" "$P/api" && printf 'export default {}\n' >"$P/web/next.config.mjs"
+out=$(context "$(hook w5 Read api/main.py)")
+check "a mixed project gives Python rules to Python files" has "$out" "R-PY-003"
+check "Python files get no web rules" lacks "$out" "R-NEXT-"
+out=$(context "$(hook w5 Read web/app/layout.tsx)")
+check "a mixed project gives Next.js rules to its app folder" has "$out" "R-NEXT-001"
+
+new_project not-git nogit
+mkdir -p "$P/node_modules/lib" && printf '{}\n' >"$P/node_modules/lib/tsconfig.json"
+out=$(hook w6 Read src/index.ts)
+check "outside git, a tsconfig.json in node_modules does not count" empty "$out"
+printf '{}\n' >"$P/tsconfig.json"
+out=$(context "$(hook w7 Read src/index.ts)")
+check "outside git, markers are still found" has "$out" "R-TS-001"
+
 # Markers, with a rules file made for the test.
 export SDLC_STACKS_RULES="$T/rules.json"
 cat >"$SDLC_STACKS_RULES" <<'JSON'

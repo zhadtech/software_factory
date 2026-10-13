@@ -8,3 +8,21 @@
 - id: python
   title: Python
   markers: []
+
+- id: typescript
+  title: TypeScript
+  markers:
+    - file: "*tsconfig.json"
+
+- id: react
+  title: React
+  markers:
+    - file: "*package.json"
+      contains: '"react"'
+
+- id: nextjs
+  title: Next.js
+  markers:
+    - file: "*next.config.*"
+    - file: "*package.json"
+      contains: '"next"'

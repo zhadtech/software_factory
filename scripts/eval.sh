@@ -4,17 +4,22 @@
 #   bash scripts/eval.sh --dry-run [case ...]   list what would run and the budget left; spend nothing
 #   bash scripts/eval.sh --changed              the cases for plugins changed since main (CHARTER.md)
 #   bash scripts/eval.sh <case> ...             named cases, such as stacks-python-encoding
+#   --runs <n>                                   runs per variant, instead of the budget file's number
+# Each run's session log is kept in $TMPDIR/sdlc-evals/<date>/, outside the repo, to read after.
 # A case is evals/cases/<name>.sh; see the comment at the top of any case for its fields.
 set -u
 cd "$(dirname "$0")/.." || exit 2
 root=$PWD
-dry="" changed="" names=""
-for a in "$@"; do
-  case $a in --dry-run) dry=1 ;; --changed) changed=1 ;; *) names="$names $a" ;; esac
+dry="" changed="" names="" runs_arg=""
+while [ $# -gt 0 ]; do
+  case $1 in --dry-run) dry=1 ;; --changed) changed=1 ;; --runs) runs_arg=${2:-}; shift ;; *) names="$names $1" ;; esac
+  shift
 done
 
 monthly=$(jq -r .monthly_usd evals/budget.json) runs=$(jq -r .runs_per_case evals/budget.json)
 per_run=$(jq -r .max_usd_per_run evals/budget.json)
+[ -z "$runs_arg" ] || runs=$runs_arg
+logs="${TMPDIR:-/tmp}/sdlc-evals/$(date +%F)" && mkdir -p "$logs"
 [ -f evals/ledger.csv ] || echo "date,case,variant,run,pass,cost_usd" >evals/ledger.csv
 month=$(date +%Y-%m)
 spent=$(awk -F, -v m="$month" 'NR > 1 && index($1, m) == 1 { s += $6 } END { printf "%.2f", s + 0 }' evals/ledger.csv)
@@ -38,6 +43,7 @@ n=$(printf '%s\n' $cases | wc -l | tr -d ' ')
 most=$(awk -v n="$n" -v r="$runs" -v p="$per_run" 'BEGIN { printf "%.2f", n * 2 * r * p }')
 echo "eval: $n case(s), $runs runs each with and without the plugin; at most \$$most"
 echo "eval: \$$spent of \$$monthly spent in $month"
+echo "eval: session logs in $logs"
 if [ -n "$dry" ]; then printf '  %s\n' $cases; exit 0; fi
 
 claude_bin=${CLAUDE_CODE_EXECPATH:-$(command -v claude)}
@@ -51,7 +57,7 @@ for c in $cases; do
         echo "eval: stopping; another run could pass the \$$monthly ceiling for $month (\$$spent spent)"
         break 3
       fi
-      fixture=$(mktemp -d) log="$fixture.jsonl"
+      fixture=$(mktemp -d) log="$logs/$c-$variant-$i-$(date +%H%M%S).jsonl"
       result=$(
         cd "$fixture" || exit 2
         # shellcheck source=/dev/null
@@ -73,7 +79,7 @@ for c in $cases; do
       spent=$(awk -v s="$spent" -v c="$cost" 'BEGIN { printf "%.2f", s + c }')
       passes=$((passes + pass)) done_runs=$((done_runs + 1))
       cost_case=$(awk -v a="$cost_case" -v c="$cost" 'BEGIN { printf "%.2f", a + c }')
-      rm -rf "$fixture" "$log"
+      rm -rf "$fixture"
     done
     summary="$summary
 $c, $variant the plugin: $passes of $done_runs passed (\$$cost_case)"

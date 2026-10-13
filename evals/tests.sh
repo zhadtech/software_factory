@@ -32,7 +32,7 @@ expect() { # expect <pass|fail> <name> <command...>
 log() { printf '%s\n' "$@" >"$T/log.jsonl"; echo "$T/log.jsonl"; }
 read_call() { printf '{"type":"assistant","parent_tool_use_id":null,"message":{"content":[{"type":"tool_use","id":"%s","name":"Read","input":{"file_path":"/p/package-lock.json"%s}}]}}' "$1" "$2"; }
 result() { printf '{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"%s","is_error":%s,"content":"x"}]}}' "$1" "$2"; }
-call() { printf '{"type":"assistant","parent_tool_use_id":null,"message":{"content":[{"type":"tool_use","id":"t","name":"%s","input":%s}]}}' "$1" "$2"; }
+call() { printf '{"type":"assistant","parent_tool_use_id":null,"message":{"content":[{"type":"tool_use","id":"%s","name":"%s","input":%s}]}}' "${3:-t}" "$1" "$2"; }
 
 expect pass "encoding: utf-8 given" run_check stacks-python-encoding /dev/null "printf 'open(p, encoding=\"utf-8\")\n' >util.py"
 expect fail "encoding: none given" run_check stacks-python-encoding /dev/null "printf 'open(p)\n' >util.py"
@@ -45,6 +45,7 @@ expect pass "heavy file: no read at all" run_check core-heavy-file-guard "$(log 
 
 expect pass "dispatch: progress note, then product" run_check core-role-dispatch "$(log "$(call Write '{"file_path":"/p/progress/now.md"}')" "$(call Agent '{"subagent_type":"sdlc-lean:product"}')")"
 expect fail "dispatch: step file written first" run_check core-role-dispatch "$(log "$(call Write '{"file_path":"/p/plan/steps/S1.md"}')" "$(call Agent '{"subagent_type":"sdlc-lean:product"}')")"
+expect pass "dispatch: a refused step write, then product" run_check core-role-dispatch "$(log "$(call Write '{"file_path":"/p/plan/steps/S1.md"}' w1)" "$(result w1 true)" "$(call Agent '{"subagent_type":"sdlc-lean:product"}')")"
 expect fail "dispatch: builder before product" run_check core-role-dispatch "$(log "$(call Agent '{"subagent_type":"sdlc-lean:builder"}')")"
 expect fail "dispatch: nothing happened" run_check core-role-dispatch "$(log '{"type":"result"}')"
 

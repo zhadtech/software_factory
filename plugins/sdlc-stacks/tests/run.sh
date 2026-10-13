@@ -95,6 +95,67 @@ printf '{}\n' >"$P/tsconfig.json"
 out=$(context "$(hook w7 Read src/index.ts)")
 check "outside git, markers are still found" has "$out" "R-TS-001"
 
+new_project expo-app
+printf '{}\n' >"$P/tsconfig.json"
+printf '{ "dependencies": { "expo": "~55.0.0", "react": "19.2.0", "react-native": "0.83.0" } }\n' >"$P/package.json"
+out=$(context "$(hook e1 Read app/index.tsx)")
+check "an Expo screen gets the TypeScript layer" has "$out" "R-TS-002"
+check "an Expo screen gets the React layer" has "$out" "R-REACT-002"
+check "an Expo screen gets the React Native layer" has "$out" "R-RN-002"
+check "an Expo screen gets the Expo layer" has "$out" "R-EXPO-003"
+check "an Expo app/ folder gets no Next.js rules" lacks "$out" "R-NEXT-"
+out=$(hook e2 Edit ios/App/AppDelegate.swift)
+check "a first edit in ios/ is denied with the prebuild rule" has "$out" "R-EXPO-002"
+
+new_project bare-rn
+printf '{ "dependencies": { "react": "19.2.0", "react-native": "0.83.0" } }\n' >"$P/package.json"
+out=$(context "$(hook e3 Read src/List.jsx)")
+check "a bare React Native app gets the React Native layer" has "$out" "R-RN-001"
+check "a bare React Native app gets no Expo rules" lacks "$out" "R-EXPO-"
+
+# Native mobile, desktop, IoT, games and .NET. files <path>...: empty files in the current project.
+files() { local f; for f in "$@"; do mkdir -p "$(dirname "$P/$f")" && : >"$P/$f"; done; }
+n=0
+# expect <file to read> <rule it must get> [rule it must not get]: each read in a new session.
+expect() {
+  n=$((n + 1))
+  local got; got=$(context "$(hook "x$n" Read "$1")")
+  check "$(basename "$P"): $1 gets $2" has "$got" "$2"
+  [ -z "${3:-}" ] || check "$(basename "$P"): $1 does not get $3" lacks "$got" "$3"
+}
+new_project swift-package; files Package.swift
+expect Sources/App/Model.swift R-SWIFT-002
+new_project ios-app; files App.xcodeproj/project.pbxproj
+expect App/ContentView.swift R-SWIFT-001
+expect App/Info.plist R-SWIFT-003
+new_project android-app; files app/src/main/AndroidManifest.xml build.gradle.kts settings.gradle.kts
+expect app/src/main/java/NewsRepository.kt R-ANDROID-001
+expect app/build.gradle.kts R-GRADLE-001
+new_project jvm-lib; files build.gradle
+expect build.gradle R-GRADLE-002
+out=$(hook x-jvm Read src/main/kotlin/Lib.kt)
+check "jvm-lib: Kotlin source outside Android gets no Android rules" empty "$out"
+new_project electron-app; printf '{ "devDependencies": { "electron": "38.0.0" } }\n' >"$P/package.json"
+expect src/main.ts R-ELECTRON-003 R-TS-
+new_project tauri-app; files src-tauri/tauri.conf.json src-tauri/Cargo.toml
+expect src-tauri/src/lib.rs R-TAURI-002
+expect src-tauri/src/main.rs R-RUST-001
+expect src-tauri/capabilities/default.json R-TAURI-001
+new_project rust-cli; files Cargo.toml
+expect src/main.rs R-RUST-002 R-TAURI-
+new_project arduino-sketch; files blink/blink.ino
+expect blink/blink.ino R-ARDUINO-001 R-PIO-
+new_project pio-firmware; files platformio.ini
+expect src/main.cpp R-PIO-001
+expect include/secrets.h R-ARDUINO-002
+new_project godot-game; files project.godot
+expect scenes/player.gd R-GODOT-002
+new_project unity-game; files ProjectSettings/ProjectVersion.txt
+expect Assets/Scripts/Player.cs R-UNITY-003 R-DOTNET-
+expect Assets/Art/hero.png R-UNITY-001
+new_project dotnet-app; files App.csproj
+expect Program.cs R-DOTNET-001 R-UNITY-
+
 # Markers, with a rules file made for the test.
 export SDLC_STACKS_RULES="$T/rules.json"
 cat >"$SDLC_STACKS_RULES" <<'JSON'

@@ -1,21 +1,20 @@
 # Now
 
-Updated 2026-10-13. `bash scripts/test.sh` passes (16 checks).
+Updated 2026-10-13. `bash scripts/test.sh` passes.
 
-Branch `phase2-stack-ts` (on top of `phase2-stacks`, pull request #3) adds the TypeScript web stack:
-three layers that combine through markers. TypeScript (R-TS-001 to 004) turns on with a
-`tsconfig.json`, React (R-REACT-001 to 004) when `package.json` lists react, and Next.js
-(R-NEXT-001 to 003) with a `next.config.*` or next in `package.json`. All rules are proposed and
-cite official docs. `sdlc-stacks` is at 0.2.0 with Python and these three stacks.
+Open pull requests, merge in this order: #4 (the stacks engine from #3, which landed in a side
+branch, plus TypeScript web), then #5 (Expo, native mobile, desktop, IoT, games and .NET).
+Both target `main`. `sdlc-stacks` is at 0.4.0: 17 stacks and 47 proposed rules, each citing
+official docs. Stack detection takes 0.25 seconds on a 20,000-file repo.
 
-Next action: ask the director which stack comes next: Expo for mobile, Swift for iOS, Electron or
-Tauri for desktop, PlatformIO for IoT, or Godot or Unity for games. Evals still wait on the
-monthly ceiling.
+Next action: phase 3, the intel loop. Build the weekly scout as a routine prompt, an inbox format
+and a digest page, then ask the director before creating the routine on their account.
+Evals still wait on the monthly ceiling.
 
 | Phase | State |
 |---|---|
 | 0. Set up the repo | Done, except branch protection and archiving the old repos |
 | 1. sdlc-core and the project template | Done. A cold session reads 9.4 KB before its first step |
-| 2. Team profiles, first stack, evals | Lean team done; stacks: Python and TypeScript web done; more stacks and evals next |
-| 3. The intel loop | Not started |
-| 4. Propagation, audits, metrics | Not started. How projects receive updates waits on the director |
+| 2. Team profiles, first stack, evals | Done except evals: lean team, role guard, 17 stacks |
+| 3. The intel loop | Next |
+| 4. Propagation, audits, metrics | Not started |

@@ -19,19 +19,26 @@ session=$(field '.session_id // "none"')
 on="$state/$session.stacks" seen="$state/$session.seen"
 glob='def glob: "^" + (gsub("(?<c>[.+^$(){}|\\[\\]\\\\])"; "\\\(.c)") | gsub("[*]"; ".*") | gsub("[?]"; ".")) + "$";'
 
-# Which stacks are on, worked out once per session.
+# Which stacks are on, worked out once per session. jq turns each marker into a regular
+# expression once; grep then scans the project's file list, which stays fast on large repos.
 if [ ! -f "$on" ]; then
   find "$state" -type f -mtime +7 -delete 2>/dev/null
-  (cd "$dir" && { git ls-files -co --exclude-standard 2>/dev/null || find . -type f -not -path './.git/*' -not -path '*/node_modules/*' | sed 's#^\./##'; }) |
-    jq -R -s -r --slurpfile r "$rules" "$glob"'
-      (split("\n") | map(select(. != ""))) as $files
-      | $r[0].stacks[]
-      | if (.markers | length) == 0 then .id
-        else .id as $id | .markers[] | . as $m | $files[] | select(test($m.file | glob))
-          | "\($id)\t\(.)\t\($m.contains // "")" end' |
-    while IFS="$(printf '\t')" read -r id path contains; do
-      if [ -z "$contains" ] || grep -qF -- "$contains" "$dir/$path" 2>/dev/null; then echo "$id"; fi
+  list="$state/$session.files"
+  (cd "$dir" && { git ls-files -co --exclude-standard 2>/dev/null || find . -type f -not -path './.git/*' -not -path '*/node_modules/*' | sed 's#^\./##'; }) >"$list"
+  jq -r "$glob"'.stacks[] | if (.markers | length) == 0 then .id
+    else .id as $id | .markers[] | "\($id)\t\(.file | glob)\t\(.contains // "")" end' "$rules" |
+    while IFS="$(printf '\t')" read -r id re contains; do
+      if [ -z "$re" ]; then
+        echo "$id"
+      elif [ -z "$contains" ]; then
+        grep -Eq -- "$re" "$list" && echo "$id"
+      else
+        grep -E -- "$re" "$list" | while IFS= read -r path; do
+          grep -qF -- "$contains" "$dir/$path" 2>/dev/null && { echo "$id"; break; }
+        done
+      fi
     done | sort -u >"$on"
+  rm -f "$list"
 fi
 touch "$seen"
 

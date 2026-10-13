@@ -26,3 +26,79 @@
     - file: "*next.config.*"
     - file: "*package.json"
       contains: '"next"'
+
+- id: react-native
+  title: React Native
+  markers:
+    - file: "*package.json"
+      contains: '"react-native"'
+
+- id: expo
+  title: Expo
+  markers:
+    - file: "*package.json"
+      contains: '"expo"'
+    - file: "*app.json"
+      contains: '"expo"'
+
+- id: swift
+  title: Swift
+  markers:
+    - file: "*Package.swift"
+    - file: "*.xcodeproj/*"
+
+- id: android
+  title: Android
+  markers:
+    - file: "*AndroidManifest.xml"
+
+- id: gradle
+  title: Gradle
+  markers:
+    - file: "*build.gradle"
+    - file: "*build.gradle.kts"
+    - file: "*settings.gradle*"
+
+- id: electron
+  title: Electron
+  markers:
+    - file: "*package.json"
+      contains: '"electron"'
+
+- id: rust
+  title: Rust
+  markers:
+    - file: "*Cargo.toml"
+
+- id: tauri
+  title: Tauri
+  markers:
+    - file: "*tauri.conf.json*"
+
+- id: arduino
+  title: Arduino and microcontrollers
+  markers:
+    - file: "*.ino"
+    - file: "*platformio.ini"
+
+- id: platformio
+  title: PlatformIO
+  markers:
+    - file: "*platformio.ini"
+
+- id: godot
+  title: Godot
+  markers:
+    - file: "*project.godot"
+
+- id: unity
+  title: Unity
+  markers:
+    - file: "*ProjectSettings/ProjectVersion.txt"
+
+- id: dotnet
+  title: .NET
+  markers:
+    - file: "*.csproj"
+    - file: "*.sln"
+    - file: "*.slnx"

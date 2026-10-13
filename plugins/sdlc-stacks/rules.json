@@ -1,0 +1,75 @@
+{
+  "generated": "From registry/stacks.yaml and registry/rules.yaml by scripts/build-stacks.rb. Do not edit by hand.",
+  "stacks": [
+    {
+      "id": "python",
+      "title": "Python",
+      "markers": []
+    }
+  ],
+  "rules": [
+    {
+      "id": "R-PY-001",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py",
+        "pyproject.toml",
+        "requirements*.txt"
+      ],
+      "text": "Run Python and its tools through the project's environment: `uv run`, the virtual environment's own `python`, or `python -m <tool>`. Never install packages into the system Python with a bare `pip install`."
+    },
+    {
+      "id": "R-PY-002",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "pyproject.toml",
+        "requirements*.txt",
+        "setup.py",
+        "setup.cfg"
+      ],
+      "text": "Declare a dependency in the file the project already uses, `pyproject.toml` or a requirements file, never only in an install command. Ask before adding one (R-CODE-006)."
+    },
+    {
+      "id": "R-PY-003",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py"
+      ],
+      "text": "Open text files with an explicit encoding, such as `open(path, encoding=\"utf-8\")`. Python's default encoding depends on the platform and its locale."
+    },
+    {
+      "id": "R-PY-004",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py"
+      ],
+      "text": "Catch the specific exceptions you expect, such as `OSError` or `ValueError`. Never write a bare `except:`, and never catch `Exception` only to pass."
+    },
+    {
+      "id": "R-PY-005",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*.py"
+      ],
+      "text": "Pass `subprocess` commands as a list of arguments. Never use `shell=True` with text you did not write yourself."
+    },
+    {
+      "id": "R-PY-006",
+      "stack": "python",
+      "status": "proposed",
+      "paths": [
+        "*test_*.py",
+        "*_test.py",
+        "*conftest.py",
+        "tests/*",
+        "*/tests/*"
+      ],
+      "text": "Run tests with the runner the project already uses, `python -m pytest` or `python -m unittest`, from the project root. Name test files `test_*.py`, and keep them where the project keeps its tests."
+    }
+  ]
+}

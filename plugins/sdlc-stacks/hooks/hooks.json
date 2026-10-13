@@ -1,0 +1,8 @@
+{
+  "description": "sdlc-stacks: adds a stack's rules the first time Claude touches a file they cover",
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Read|Edit|Write|NotebookEdit", "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/stack-rules.sh" }] }
+    ]
+  }
+}

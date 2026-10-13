@@ -66,8 +66,10 @@ for c in $cases; do
         plugins=$([ "$variant" = with ] && echo "$WITH" || echo "$WITHOUT")
         args=""
         for p in $plugins; do args="$args --plugin-dir $root/plugins/$p"; done
+        prompt=$PROMPT
+        [ "$variant" = without ] && [ -n "${PROMPT_WITHOUT:-}" ] && prompt=$PROMPT_WITHOUT
         # shellcheck disable=SC2086  # args is a list of flags
-        "$claude_bin" -p "$PROMPT" --model "$MODEL" --max-turns "$TURNS" --max-budget-usd "$per_run" $args \
+        "$claude_bin" -p "$prompt" --model "$MODEL" --max-turns "$TURNS" --max-budget-usd "$per_run" $args \
           --permission-mode acceptEdits --output-format stream-json --verbose \
           --allowedTools "Bash(git *)" "Bash(python3 *)" "Bash(rg *)" "Bash(jq *)" "Bash(ls *)" "Bash(wc *)" \
           >"$log" 2>/dev/null </dev/null

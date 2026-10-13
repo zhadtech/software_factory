@@ -1,6 +1,6 @@
 {
   "name": "sdlc-lean",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The five-role lean team: product, architect, builder, reviewer and release. Each role works one step from plan/queue.json and ends with the handoff block that sdlc-core checks.",
   "author": {
     "name": "zhadtech"

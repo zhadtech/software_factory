@@ -1084,6 +1084,9 @@
     no role agent ran; it wrote the step, the code and the tests, and committed to main. Trial E,
     interactive, the same Haiku 4.5 setup with the role-work guard in sdlc-core 0.2.0: it handed the
     request to product and S1 to the builder unasked, and the guard never had to deny a call.
+    Evals on 2026-10-13 (evals/results.md): Claude Code tells the main session "Do not spawn agents
+    unless the user asks", so after a refusal Haiku often asked the director instead of handing off;
+    the /sdlc-lean:team command, which is the director asking, got product called every time.
   checked_on:
   checked_at:
   review_by: 2027-01-31

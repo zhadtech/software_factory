@@ -20,6 +20,10 @@ The director is the person who runs this project and approves the agents' work; 
 The factory's plugins update themselves. To pull its latest rules into the block below, run
 `sdlc-update` at the start of a session, review `git diff AGENTS.md`, and commit it on its own.
 
+The director starts work for the roles with `/sdlc-lean:team <request>`. Claude Code starts
+sub-agents only when the user asks, so when a request without it needs role work, say so in one
+sentence and ask the director to send it again with that command.
+
 <!-- factory-rules:start statuses=active,trial,proposed
 Generated from software_factory registry/rules.yaml by scripts/build-agents-md.rb. Do not edit by hand.
 Includes proposed rules that wait on the director's approval; remove "proposed" above once they are decided. -->

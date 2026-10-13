@@ -1,6 +1,7 @@
 # Does R-PY-003 make Claude open text files with an explicit encoding?
 # Fields: PLUGIN, the plugin the case tests (--changed picks cases by it); RULES, the rules it
-# gives evidence for; WITH and WITHOUT, the plugins each variant loads; MODEL; TURNS; PROMPT;
+# gives evidence for; WITH and WITHOUT, the plugins each variant loads; MODEL; TURNS; PROMPT, and
+# optionally PROMPT_WITHOUT, a different prompt for the variant without;
 # setup, run in an empty folder before the session; check, run there after it, with the session's
 # stream-json log in $TRANSCRIPT, and exits 0 when the run passes.
 PLUGIN=sdlc-stacks

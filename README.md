@@ -25,9 +25,14 @@ bash scripts/new-project.sh ~/my-project
 
 This copies the template into a new folder, makes it a git repo on `main`, and commits the
 starting files. Open the folder in Claude Code and trust it. Claude Code then fetches the
-factory's marketplace in the background and turns on the two plugins that `.claude/settings.json`
+factory's marketplace in the background and turns on the three plugins that `.claude/settings.json`
 names. If they are missing in that first session, run `/reload-plugins`. Each person needs read
 access to this repo on GitHub.
+
+Start each request for the role agents with `/sdlc-lean:team`, for example
+`/sdlc-lean:team Add a word counter with tests`. Claude Code starts sub-agents only when you ask,
+and this command is how you ask. Product writes the steps, the builder builds them, and the
+reviewer checks the medium and large ones.
 
 The template's verify script checks size budgets only. Add the project's own stages, such as
 tests and type checks, to `scripts/verify.sh`.

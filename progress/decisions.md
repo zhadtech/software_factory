@@ -26,3 +26,4 @@
 - 2026-10-13 · The digest's pinned page is `intel/digest.md` on GitHub; the audit runs on the first Monday of each month, after the scout · `audits/auditor.md`
 - 2026-10-13 · The scout (Mondays 09:07) and audit (first Monday 10:07) run as routines on the director's plan, Asia/Saigon time, on Sonnet 5.5, with no connectors: https://claude.ai/code/routines/trig_01HgsdZqxr3RJBV2TPZHb5M9 and https://claude.ai/code/routines/trig_01TP16Hepf3HpgktviZgbRAA (the director: "yes, create the routines")
 - 2026-10-13 · The eval ceiling is one long session a month, set as $20 of the cost headless runs report (the director: "set the eval ceiling to one long session a month") · `evals/budget.json`
+- 2026-10-13 · Team work starts with `/sdlc-lean:team`, because Claude Code tells the main session not to start sub-agents unless the user asks; the role-work guard stays as the backstop · `plugins/sdlc-lean/skills/team/SKILL.md`

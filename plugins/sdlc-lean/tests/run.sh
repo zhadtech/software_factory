@@ -32,6 +32,15 @@ for f in "$PLUGIN"/agents/*.md; do
   check "$a: file is under 2500 bytes" [ "$(wc -c <"$f")" -le 2500 ]
 done
 
+# Skills: the name matches the folder, and the description says when to use it.
+for f in "$PLUGIN"/skills/*/SKILL.md; do
+  s=$(basename "$(dirname "$f")")
+  check "skill $s: name matches the folder" [ "$(field "$f" name)" = "$s" ]
+  d=$(field "$f" description)
+  check "skill $s: description is 1 to 1024 characters" [ ${#d} -ge 1 -a ${#d} -le 1024 ]
+  check "skill $s: names every role it dispatches" grep -q "sdlc-lean:product" "$f"
+done
+
 # The template's handoff list names exactly these roles.
 want=$(jq -r '.handoff_agents | sort | join(" ")' "$ROOT/templates/project/.claude/sdlc.json")
 have=$(printf '%s\n' $names | sort | tr '\n' ' ' | sed 's/ $//')

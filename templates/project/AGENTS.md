@@ -17,6 +17,9 @@ The director is the person who runs this project and approves the agents' work; 
 | `plan/steps/S<n>.md` | One step: goal, acceptance criteria, files, out of scope. 40 lines at most | The step is written |
 | `INDEX.md` | Map: path, purpose, open it when. One line per row | A file is added, moved or retired |
 
+The factory's plugins update themselves. To pull its latest rules into the block below, run
+`sdlc-update` at the start of a session, review `git diff AGENTS.md`, and commit it on its own.
+
 <!-- factory-rules:start statuses=active,trial,proposed
 Generated from software_factory registry/rules.yaml by scripts/build-agents-md.rb. Do not edit by hand.
 Includes proposed rules that wait on the director's approval; remove "proposed" above once they are decided. -->

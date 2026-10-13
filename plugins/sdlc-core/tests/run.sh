@@ -209,6 +209,24 @@ out=$(hook check-queue.sh '{"tool_input":{"file_path":"'"$P"'/progress/now.md"}}
 check "queue check ignores other files" empty "$out"
 mv "$P/queue.bak" plan/queue.json
 
+# sdlc-metrics: steps come from commit trailers.
+git commit -q --allow-empty -m "S5 work" -m "Step: S5
+Tier: S
+Verify: npm test -> 12 passed
+Open: none"
+git commit -q --allow-empty -m "S6 work" -m "Step: S6
+Tier: M
+Verify: none
+Open: should errors exit 1?"
+out=$("$B/sdlc-metrics")
+check "sdlc-metrics counts steps from trailers" has "$out" "steps done: 2 (2 in the last 28 days)"
+check "sdlc-metrics counts steps by tier" has "$out" "by tier: S 1, M 1, L 0"
+check "sdlc-metrics counts steps with no verify command" has "$out" "steps whose commit names no verify command: 1"
+check "sdlc-metrics counts steps with an open question" has "$out" "steps that left an open question: 1"
+check "sdlc-metrics measures boot bytes" has "$out" "bytes before the first step"
+out=$("$B/sdlc-metrics" --csv)
+check "sdlc-metrics --csv prints a header and one row" [ "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" = 2 ]
+
 # compaction snapshot
 echo change >> progress/waiting.md
 hook snapshot-state.sh '{"trigger":"auto"}'

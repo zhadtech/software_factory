@@ -1,7 +1,8 @@
 {
   "extraKnownMarketplaces": {
     "software-factory": {
-      "source": { "source": "github", "repo": "zhadtech/software_factory" }
+      "source": { "source": "github", "repo": "zhadtech/software_factory" },
+      "autoUpdate": true
     }
   },
   "enabledPlugins": {

@@ -17,13 +17,16 @@ Rules for any agent changing this repo. Read once at session start, then read
 | `intel/scout.md` | The weekly scout's instructions; `intel/sources.yaml` lists what it reads | Running or changing the scout |
 | `intel/digest.md` | What the scout found, newest week first; one inbox file per run in `intel/inbox/` | Reading what changed this week |
 | `scripts/check-intel.rb` | Checks the inbox files, the digest and `intel/state.json` | After a scout run |
+| `audits/auditor.md` | The monthly audit's instructions; each audit is `audits/<date>.md` | Running or changing the audit |
+| `scripts/audit.rb` | The audit's facts: review dates, unchecked and waiting rules, scout triggers, broken sources | Before proposing a status change |
+| `scripts/metrics.sh` | Boot bytes of a fresh project and the size of the rule set; `--record` adds a row to `metrics/factory.csv` | Checking a change did not raise the boot cost |
 | `scripts/new-project.sh` | Starts a project from the template in a new folder | Making a trial project |
 | `.claude/hooks/guard-main.sh` | Blocks agent pushes to `main`, force pushes and merges | A guard blocks a command you think is fine |
 | `scripts/check-registry.rb` | Registry check | After any change under `registry/` |
 | `scripts/build-agents-md.rb` | Writes the rules block of the template AGENTS.md from the registry | After any rule change |
 | `scripts/build-stacks.rb` | Writes `plugins/sdlc-stacks/rules.json` from the registry | After any stack rule or stack change |
 | `.claude-plugin/marketplace.json` | The plugin catalog projects install from | Adding or renaming a plugin |
-| `plugins/sdlc-core/` | Hooks, `next-step`, `sdlc-budget`, queue schema; tests in `tests/run.sh` | Changing a hook |
+| `plugins/sdlc-core/` | Hooks, `next-step`, `sdlc-budget`, `sdlc-update`, `sdlc-metrics`, queue schema; tests in `tests/run.sh` | Changing a hook or a project command |
 | `plugins/sdlc-lean/` | The five role agents: product, architect, builder, reviewer, release; tests in `tests/run.sh` | Changing a role |
 | `plugins/sdlc-stacks/` | The hook that adds stack rules near matching files, and its generated `rules.json`; tests in `tests/run.sh` | Changing how stack rules load |
 | `registry/stacks.yaml` | Each stack and the marker files that identify it | Adding a stack |

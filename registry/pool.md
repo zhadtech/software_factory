@@ -202,6 +202,8 @@ Tips the weekly scout (`intel/scout.md`) found in official sources. Each names i
 
 146. Make a guard hook fail closed with `onFailure: "block"`, so a guard that crashes or times out blocks the action instead of letting it through. Needs Claude Code 2.1.295 or later on every machine. Source: the Claude Code changelog, 2.1.295.
 
+147. Know that a conversation of 200K tokens or more, left idle for about 54 minutes, is now compacted automatically before the prompt cache expires (Claude Code 2.1.299). Set `"idleCompaction": false` in settings.json, or use the `Idle compaction` row in `/config`, to turn it off; keep handoff notes in files so a compaction loses nothing. Source: the Claude Code changelog, 2.1.299 and 2.1.302.
+
 ## Sources
 
 - [AGENTS.md Spec (2026): Recommended Sections + AGENTS.md vs CLAUDE.md vs .cursorrules](https://www.morphllm.com/agents-md-guide)

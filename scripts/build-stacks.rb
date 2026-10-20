@@ -29,8 +29,9 @@ data = {
 json = JSON.pretty_generate(data) + "\n"
 
 if ARGV.include?("--check")
-  current = File.exist?(OUT) ? File.read(OUT) : ""
-  abort "#{OUT.delete_prefix("#{ROOT}/")} is out of date: run ruby scripts/build-stacks.rb" unless current == json
+  # Compare parsed content, not text: JSON gem versions differ in whitespace, such as empty arrays.
+  current = File.exist?(OUT) ? JSON.parse(File.read(OUT)) : nil
+  abort "#{OUT.delete_prefix("#{ROOT}/")} is out of date: run ruby scripts/build-stacks.rb" unless current == JSON.parse(json)
   puts "stack rules up to date: #{data['rules'].size} rule(s) for #{data['stacks'].size} stack(s)"
 else
   File.write(OUT, json)

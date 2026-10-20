@@ -3,6 +3,13 @@
 What the weekly scout found, newest week first. Each week links to its inbox file and its pull
 request. The scout keeps the twelve newest weeks. Written by `intel/scout.md`.
 
+## Week of 2026-10-20
+
+Claude Code 2.1.304 is the only release since last week, and nothing in it needs a change. After a compaction Claude is now sent the skill list again, skill hooks are capped at 1,024 per source, and several subagent and hook bugs are fixed, none of which the factory's plugins hit. The platform notes only say inference hooks are out of beta for Enterprise, with no new model or retirement. The engineering blog has a 2026-10-13 post on source control at Anthropic that agrees with the existing guard and review rules. The 2026-10-13 audit triggers stand, and P146 still waits on every machine running 2.1.295 or later.
+
+- No pool tips, rules or plugin changes this week.
+- Inbox: `intel/inbox/2026-10-20.md`.
+
 ## Week of 2026-10-19
 
 Claude Code moved from 2.1.296 to 2.1.303 and the platform notes added only fast-mode and tracing news, so this was a quiet week. The one change worth the director's attention is idle compaction: a conversation of 200K tokens or more that sits idle is now compacted on its own before the cache expires, and it can be turned off in settings. Hook input is now validated and prompt hooks are capped at 12 at a time, but the factory's hooks are unaffected. The Anthropic engineering blog still has nothing since May. The 2026-10-13 audit triggers stand, and the hook fail-closed tip (P146) still waits on every machine running 2.1.295 or later.

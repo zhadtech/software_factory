@@ -204,6 +204,8 @@ Tips the weekly scout (`intel/scout.md`) found in official sources. Each names i
 
 147. Know that a conversation of 200K tokens or more, left idle for about 54 minutes, is now compacted automatically before the prompt cache expires (Claude Code 2.1.299). Set `"idleCompaction": false` in settings.json, or use the `Idle compaction` row in `/config`, to turn it off; keep handoff notes in files so a compaction loses nothing. Source: the Claude Code changelog, 2.1.299 and 2.1.302.
 
+148. Keep every machine on a current Claude Code version, because guard hooks failed open on Windows in older ones: a PreToolUse or PermissionRequest hook let the call through when Git Bash was missing and its command was only quoted strings, and PowerShell hooks did not block on exit code 2. Both were fixed in 2.1.309 and 2.1.310. Pair this with the fail-closed tip above. Source: the Claude Code changelog, 2.1.309 and 2.1.310.
+
 ## Sources
 
 - [AGENTS.md Spec (2026): Recommended Sections + AGENTS.md vs CLAUDE.md vs .cursorrules](https://www.morphllm.com/agents-md-guide)

@@ -3,6 +3,14 @@
 What the weekly scout found, newest week first. Each week links to its inbox file and its pull
 request. The scout keeps the twelve newest weeks. Written by `intel/scout.md`.
 
+## Week of 2026-11-03
+
+Claude Code moved from 2.1.303 to 2.1.317 over two weeks, and the platform notes brought no new models; the only model news is that fast mode for Opus 4.8 ends on 2026-11-30, which nothing in the factory uses. Two changes touch the guards: hooks that match Bash now also run on Monitor commands, and a new setting blocks writes outside the working directories. Subagents on a different model now take that model's effort level rather than the session's, so the next audit should check that the lean roles' `effort:` lines still apply. The engineering blog has one post from 2026-10-13 that earlier digests did not mention, and it has no bearing on a rule. The stack-docs source was not read this run, and 2.1.304 to 2.1.308 were only skimmed.
+
+- Added pool tips P148 (block writes outside the working directories) and P149 (hooks on Monitor commands).
+- Flagged for the next audit: the `effort:` frontmatter of the five lean roles (`plugins/sdlc-lean/agents/`).
+- Inbox: `intel/inbox/2026-11-03.md`.
+
 ## Week of 2026-10-19
 
 Claude Code moved from 2.1.296 to 2.1.303 and the platform notes added only fast-mode and tracing news, so this was a quiet week. The one change worth the director's attention is idle compaction: a conversation of 200K tokens or more that sits idle is now compacted on its own before the cache expires, and it can be turned off in settings. Hook input is now validated and prompt hooks are capped at 12 at a time, but the factory's hooks are unaffected. The Anthropic engineering blog still has nothing since May. The 2026-10-13 audit triggers stand, and the hook fail-closed tip (P146) still waits on every machine running 2.1.295 or later.

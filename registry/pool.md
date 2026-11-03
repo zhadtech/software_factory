@@ -204,6 +204,10 @@ Tips the weekly scout (`intel/scout.md`) found in official sources. Each names i
 
 147. Know that a conversation of 200K tokens or more, left idle for about 54 minutes, is now compacted automatically before the prompt cache expires (Claude Code 2.1.299). Set `"idleCompaction": false` in settings.json, or use the `Idle compaction` row in `/config`, to turn it off; keep handoff notes in files so a compaction loses nothing. Source: the Claude Code changelog, 2.1.299 and 2.1.302.
 
+148. In a project's settings.json, set `permissions.blockWritesOutsideWorkingDirectories` to true, so Write, Edit and NotebookEdit refuse any path outside the project in every permission mode. Needs Claude Code 2.1.314 or later. Source: the Claude Code changelog, 2.1.314.
+
+149. Know that a PreToolUse hook matching Bash now also runs on shell commands started by the Monitor tool, where it can block or ask but not approve or rewrite; write hook `if` conditions as `Monitor(tail *)` to target them. Source: the Claude Code changelog, 2.1.314.
+
 ## Sources
 
 - [AGENTS.md Spec (2026): Recommended Sections + AGENTS.md vs CLAUDE.md vs .cursorrules](https://www.morphllm.com/agents-md-guide)

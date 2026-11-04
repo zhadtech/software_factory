@@ -3,6 +3,13 @@
 What the weekly scout found, newest week first. Each week links to its inbox file and its pull
 request. The scout keeps the twelve newest weeks. Written by `intel/scout.md`.
 
+## Week of 2026-10-27
+
+Claude Code moved from 2.1.303 to 2.1.311. The change worth the director's attention is that guard hooks failed open on Windows when Git Bash was missing, or when a PowerShell hook exited with code 2; this was fixed in 2.1.309 and 2.1.310, and it adds a second reason to keep every machine current, beside the fail-closed tip (P146). Compaction became safer, and a `SubagentStop` fix means the next audit should check sdlc-core's counters. The platform notes brought API version 2026-10-21 and new SDK majors, which the factory does not use. Last week's digest wrongly said the engineering blog had nothing since May: its 2026-10-13 post on source control was already there, and it has no bearing on the factory.
+
+- Added pool tip P148: keep every machine on a current Claude Code version, because guard hooks failed open on Windows.
+- Flagged for the next audit: the `SubagentStop` hook and the handoff check in plugins/sdlc-core, for double counts before 2.1.311.
+- Inbox: `intel/inbox/2026-10-27.md`.
 ## Week of 2026-10-20
 
 Claude Code 2.1.304 is the only release since last week, and nothing in it needs a change. After a compaction Claude is now sent the skill list again, skill hooks are capped at 1,024 per source, and several subagent and hook bugs are fixed, none of which the factory's plugins hit. The platform notes only say inference hooks are out of beta for Enterprise, with no new model or retirement. The engineering blog has a 2026-10-13 post on source control at Anthropic that agrees with the existing guard and review rules. The 2026-10-13 audit triggers stand, and P146 still waits on every machine running 2.1.295 or later.

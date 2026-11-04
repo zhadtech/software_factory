@@ -10,6 +10,12 @@ Claude Code moved from 2.1.303 to 2.1.311. The change worth the director's atten
 - Added pool tip P148: keep every machine on a current Claude Code version, because guard hooks failed open on Windows.
 - Flagged for the next audit: the `SubagentStop` hook and the handoff check in plugins/sdlc-core, for double counts before 2.1.311.
 - Inbox: `intel/inbox/2026-10-27.md`.
+## Week of 2026-10-20
+
+Claude Code 2.1.304 is the only release since last week, and nothing in it needs a change. After a compaction Claude is now sent the skill list again, skill hooks are capped at 1,024 per source, and several subagent and hook bugs are fixed, none of which the factory's plugins hit. The platform notes only say inference hooks are out of beta for Enterprise, with no new model or retirement. The engineering blog has a 2026-10-13 post on source control at Anthropic that agrees with the existing guard and review rules. The 2026-10-13 audit triggers stand, and P146 still waits on every machine running 2.1.295 or later.
+
+- No pool tips, rules or plugin changes this week.
+- Inbox: `intel/inbox/2026-10-20.md`.
 
 ## Week of 2026-10-19
 

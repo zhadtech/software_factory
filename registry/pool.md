@@ -210,6 +210,8 @@ Tips the weekly scout (`intel/scout.md`) found in official sources. Each names i
 
 150. Know that a PreToolUse hook matching Bash now also runs on shell commands started by the Monitor tool, where it can block or ask but not approve or rewrite; write hook `if` conditions as `Monitor(tail *)` to target them. Source: the Claude Code changelog, 2.1.314.
 
+151. In a project's settings.json, consider `permissions.denyInsteadOfPrompting` set to true for unattended runs, so a tool call that would wait on a permission prompt is denied and the turn continues, in terminal sessions, subagents and teammates; the run can then report the blocked step instead of hanging. Needs Claude Code 2.1.319 or later. Source: the Claude Code changelog, 2.1.319.
+
 ## Sources
 
 - [AGENTS.md Spec (2026): Recommended Sections + AGENTS.md vs CLAUDE.md vs .cursorrules](https://www.morphllm.com/agents-md-guide)

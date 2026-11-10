@@ -3,6 +3,14 @@
 What the weekly scout found, newest week first. Each week links to its inbox file and its pull
 request. The scout keeps the twelve newest weeks. Written by `intel/scout.md`.
 
+## Week of 2026-11-10
+
+Anthropic released Claude Fable 5.2 on 2026-11-09 and Claude Mythos 5.2 for verified organizations; Claude Code moved from 2.1.317 to 2.1.322 and made Fable 5.2 its default Fable model. The lean roles use the `opus` and `sonnet` aliases, so nothing changes for them, but a new model is a reason to recheck the rules at the next audit. Claude Code 2.1.319 and 2.1.321 fixed several ways a Bash command could slip past permission checks, so the next audit should test the main-branch guard against them and confirm every machine is current. A new setting, `permissions.denyInsteadOfPrompting`, would let unattended runs fail fast instead of waiting on a prompt. The engineering blog has a 2026-11-06 post on agent memory that could not be read this run.
+
+- Added pool tip P151: `permissions.denyInsteadOfPrompting` for unattended runs.
+- Flagged for the next audit: the five lean roles against Fable 5.2; `.claude/hooks/guard-main.sh` and the template's deny rules against the Bash bypass fixes; the PostToolUse hook in plugins/sdlc-core after interrupted turns.
+- Inbox: `intel/inbox/2026-11-10.md`.
+
 ## Week of 2026-11-03
 
 Claude Code moved from 2.1.311 to 2.1.317, and the platform notes brought no new models; the only model news is that fast mode for Opus 4.8 ends on 2026-11-30, which nothing in the factory uses. Two changes touch the guards: hooks that match Bash now also run on Monitor commands, and a new setting blocks writes outside the working directories. Subagents on a different model now take that model's effort level rather than the session's, so the next audit should check that the lean roles' `effort:` lines still apply. The stack-docs source was not read this run.

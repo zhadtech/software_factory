@@ -12,7 +12,7 @@ unmerged, so the 2026-10-27 and 2026-11-03 branches conflicted with the week bef
 starts from the newest unmerged `intel/*` branch (`intel/scout.md`, step 1).
 
 Branch `audit-findings-2026-11-12` (not pushed) carries what a process audit of one project found:
-pool tips P151 to P158, three proposed rules (R-PLAN-007, R-TEAM-004, R-VER-007), the lean roles
+pool tips P152 to P159, three proposed rules (R-PLAN-007, R-TEAM-004, R-VER-007), the lean roles
 cut steps by outcome and give a step one review round (sdlc-lean 0.3.0), and `sdlc-metrics` prints
 the lines added to code, tests and paper (sdlc-core 0.4.0). The template's `AGENTS.md` grew from
 9,925 to 10,953 bytes. Its evals ran on 2026-11-12 ($0.99; `evals/results.md`): the team command

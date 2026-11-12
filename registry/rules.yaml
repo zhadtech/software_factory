@@ -1983,8 +1983,8 @@
   enforcement: rule-file
   where: templates/project/AGENTS.md
   sources:
-    - pool P151
-    - pool P157
+    - pool P152
+    - pool P158
     - https://www.anthropic.com/engineering/multi-agent-research-system
     - https://cognition.ai/blog/dont-build-multi-agents
     - "fog_of_war process audit, 2026-11-12 (its PROGRESS.md, Decisions; commit a1f9660)"
@@ -2010,9 +2010,9 @@
   enforcement: rule-file
   where: templates/project/AGENTS.md
   sources:
-    - pool P152
     - pool P153
     - pool P154
+    - pool P155
     - https://cognition.ai/blog/dont-build-multi-agents
     - "fog_of_war process audit, 2026-11-12 (its PROGRESS.md, Decisions; commit a1f9660)"
   evidence: >-
@@ -2036,9 +2036,9 @@
   enforcement: rule-file
   where: templates/project/AGENTS.md
   sources:
-    - pool P155
     - pool P156
     - pool P157
+    - pool P158
     - "fog_of_war process audit, 2026-11-12 (its PROGRESS.md, Decisions; commit a1f9660)"
   evidence: >-
     One project: 20 of 75 test files read source text, ahead of a rewrite of the module they

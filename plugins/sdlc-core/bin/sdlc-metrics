@@ -3,7 +3,10 @@
 #   sdlc-metrics           one line per measure
 #   sdlc-metrics --csv     a header line and one row, for keeping a history
 # Steps come from commits with a Step: trailer (R-PLAN-006). Boot is the bytes a cold session
-# reads before its first step: CLAUDE.md, AGENTS.md and the sdlc-core state card.
+# reads before its first step: CLAUDE.md, AGENTS.md and the sdlc-core state card. The last three
+# measures show where the last 28 days went: lines added to code, to tests and to paper (prose,
+# and the plan and progress files), and the commits that touched neither code nor tests. Paper
+# that outgrows code means the team writes for itself (R-PLAN-007).
 set -u
 command -v jq >/dev/null 2>&1 || { echo "sdlc-metrics needs jq" >&2; exit 2; }
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -21,10 +24,20 @@ waiting=$(grep -cE '^([0-9]+\.|-) ' progress/waiting.md 2>/dev/null); waiting=${
 dead=$(grep -cE '^- ' progress/dead-ends.md 2>/dev/null); dead=${dead:-0}
 card=$(printf '{"source":"startup"}' | CLAUDE_PROJECT_DIR=$PWD bash "$here/../scripts/state-card.sh" 2>/dev/null | wc -c | tr -d ' ')
 boot=$(( $(cat CLAUDE.md AGENTS.md 2>/dev/null | wc -c) + card ))
+mix=$(git log --since='28 days ago' --numstat --format='%x40' 2>/dev/null | awk -F'\t' '
+  /^@$/ { if (seen) { n++; if (!touched) quiet++ } seen = 1; touched = 0; next }
+  NF == 3 && $1 != "-" {
+    f = $3
+    if (f ~ /\.(md|mdx|txt|rst|adoc)$/ || f ~ /^(plan|progress|docs)\//) paper += $1
+    else if (f ~ /(^|\/)(tests?|__tests__|specs?)\// || f ~ /[._-](test|spec)\.[^\/]+$/ || f ~ /(^|\/)test_[^\/]+$/) { tests += $1; touched = 1 }
+    else { code += $1; touched = 1 }
+  }
+  END { if (seen) { n++; if (!touched) quiet++ } printf "%d %d %d %d %d", n, quiet, code, tests, paper }')
+read -r commits_28 quiet_28 code_28 tests_28 paper_28 <<<"${mix:-0 0 0 0 0}"
 
 if [ "${1:-}" = --csv ]; then
-  echo "date,steps,steps_28d,tier_s,tier_m,tier_l,steps_without_verify,steps_with_open,waiting,dead_ends,boot_bytes"
-  echo "$(date +%F),$done_all,$done_28,$tier_s,$tier_m,$tier_l,$no_verify,$open,$waiting,$dead,$boot"
+  echo "date,steps,steps_28d,tier_s,tier_m,tier_l,steps_without_verify,steps_with_open,waiting,dead_ends,boot_bytes,commits_28d,commits_without_code_28d,code_lines_28d,test_lines_28d,paper_lines_28d"
+  echo "$(date +%F),$done_all,$done_28,$tier_s,$tier_m,$tier_l,$no_verify,$open,$waiting,$dead,$boot,$commits_28,$quiet_28,$code_28,$tests_28,$paper_28"
   exit 0
 fi
 echo "steps done: $done_all ($done_28 in the last 28 days)"
@@ -34,3 +47,5 @@ echo "steps that left an open question: $open"
 echo "questions waiting on the director: $waiting"
 echo "dead ends recorded: $dead"
 echo "boot: $boot bytes before the first step (CLAUDE.md, AGENTS.md and the state card)"
+echo "commits in the last 28 days that changed no code or tests: $quiet_28 of $commits_28"
+echo "lines added in the last 28 days: code $code_28, tests $tests_28, paper $paper_28"

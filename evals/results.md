@@ -3,6 +3,24 @@
 What each eval run showed, newest first. The ledger (`evals/ledger.csv`) has every run's pass and
 cost; this file says what the numbers mean.
 
+## 2026-11-12
+
+Run for sdlc-core 0.4.0 and sdlc-lean 0.3.0 (branch `audit-findings-2026-11-12`), 18 runs, $0.99.
+
+- **lean-team-command** (R-TEAM-003): 3 of 3 passed with `/sdlc-lean:team` and 0 of 3 without. The
+  changed team skill (one review round, resume the same builder) still gets product called first
+  every time. A full run of the team cost $0.22 to $0.32.
+- **core-role-dispatch** (R-TEAM-003): 0 of 3 passed with sdlc-core and 0 of 3 without, on Haiku.
+  With the guard, every write the main session tried was refused, and it then asked the director
+  to send the request again with `/sdlc-lean:team`. That is what the template's `AGENTS.md` now
+  tells it to do, so the case's pass condition (product was called) is out of date, not the
+  guard. This branch changes only `sdlc-metrics` in sdlc-core. The case needs a new pass
+  condition: no write went through, and the reply names the team command.
+- **core-heavy-file-guard** (R-BOOT-003): 3 of 3 with and 3 of 3 without, as on 2026-10-13.
+- No eval case covers the three proposed rules or the new `sdlc-metrics` lines; the plugin tests
+  cover the measures. A case for R-PLAN-007 would compare the steps product writes for one
+  request with and without the rule.
+
 ## 2026-10-13
 
 - **lean-team-command** (R-TEAM-003): with `/sdlc-lean:team`, the main session called product

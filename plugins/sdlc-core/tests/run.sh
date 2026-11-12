@@ -242,6 +242,23 @@ check "sdlc-metrics counts steps with an open question" has "$out" "steps that l
 check "sdlc-metrics measures boot bytes" has "$out" "bytes before the first step"
 out=$("$B/sdlc-metrics" --csv)
 check "sdlc-metrics --csv prints a header and one row" [ "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" = 2 ]
+check "sdlc-metrics --csv keeps boot bytes in field 11" [ "$(printf '%s\n' "$out" | head -1 | cut -d, -f11)" = boot_bytes ]
+
+# sdlc-metrics: where the last 28 days went, by lines added to code, tests and paper.
+before=$("$B/sdlc-metrics" --csv | tail -1)
+mkdir -p src tests docs
+printf 'a\nb\nc\n' > src/a.js; printf 'a\nb\n' > tests/a.test.js; printf 'a\nb\nc\nd\n' > docs/note.md
+git add src tests docs && git commit -q -m "code, tests and paper"
+printf 'e\n' >> docs/note.md
+git add docs && git commit -q -m "paper only"
+after=$("$B/sdlc-metrics" --csv | tail -1)
+delta() { echo $(( $(printf '%s' "$after" | cut -d, -f"$1") - $(printf '%s' "$before" | cut -d, -f"$1") )); }
+check "sdlc-metrics counts the commits of the last 28 days" [ "$(delta 12)" = 2 ]
+check "sdlc-metrics counts commits that changed no code or tests" [ "$(delta 13)" = 1 ]
+check "sdlc-metrics counts lines added to code" [ "$(delta 14)" = 3 ]
+check "sdlc-metrics counts lines added to tests" [ "$(delta 15)" = 2 ]
+check "sdlc-metrics counts lines added to paper" [ "$(delta 16)" = 5 ]
+check "sdlc-metrics prints the paper and code lines" has "$("$B/sdlc-metrics")" "lines added in the last 28 days: code"
 
 # compaction snapshot
 echo change >> progress/waiting.md

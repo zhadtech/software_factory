@@ -43,6 +43,7 @@ Cite rules by ID in review ("violates R-CTX-002"). Change them in the factory re
 **R-PLAN-004.** No task begins without its steps in plan/queue.json. Each open step has a step file plan/steps/S<n>.md of at most 40 lines: goal, acceptance criteria, files, out of scope. When the director gives a task and the queue has no step for it, write the steps first and confirm them before writing code.
 **R-PLAN-005.** Each step must fit one sitting. Its verify field names a command that tests behavior, with an exit code or an observable result. A prose step has verify none and, if it matters, a reviewer. Never check prose with grep.
 **R-PLAN-006.** In the same turn a step is done: remove it from plan/queue.json, rewrite progress/now.md, and commit with the trailers Step:, Tier:, Verify: and Open:. The commit is the step log; there is no hand-written progress log. Read history with git log --grep='^Step: S<n>'.
+**R-PLAN-007.** Cut work into steps that each end in something the director or a test can see. One agent does the whole step in one context: the requirement, the code and its tests. Add no step whose only output is a document for the next agent. When a plan drops or replaces a feature, its first step removes the code and tests that become dead.
 
 ### Sessions
 
@@ -81,6 +82,7 @@ Cite rules by ID in review ("violates R-CTX-002"). Change them in the factory re
 **R-VER-004.** Never weaken a test to make it pass: no deleting cases, no loosening assertions, no mocking away the thing under test, no `skip`.
 **R-VER-005.** If tests fail, say so plainly with the output. A failing state reported honestly is worth more than a green claim.
 **R-VER-006.** Verify and test commands print one line per stage on success. On failure they print the failing cases only. The full log goes to .verify/.
+**R-VER-007.** A test calls the code's public functions and asserts what they do. It never reads source text to assert how the code is written; a rule about structure is a lint rule or a static check. Delete a test only in the commit that deletes the code or the requirement it covers, and name the test in the commit message. Time the suite before splitting it into tiers.
 
 ### Git and blast radius
 
@@ -93,6 +95,7 @@ Cite rules by ID in review ("violates R-CTX-002"). Change them in the factory re
 ### The team
 
 **R-TEAM-003.** When the next step's owner is a role agent (product, architect, builder, reviewer or release), hand the step to that agent with its step id. A request with no step goes to product first. The main session does no role work: it does not write the code, run a role's checks or commit for a role. When a role ends blocked, put its OPEN question to the director, then resume the same role. Handing a step to its owner is not the delegation R-CTX-008 limits.
+**R-TEAM-004.** A step gets one review round. Give the findings to the agent that wrote the step by resuming it, not by starting a new one. Open a second round only for a blocking finding. Call the planning role at the plan, at the close and when the director changes the scope, not after a count of steps.
 
 ### Trust boundary
 

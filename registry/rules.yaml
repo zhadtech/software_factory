@@ -1971,3 +1971,82 @@
   review_by: 2027-01-31
   status: proposed
   owner: director
+
+- id: R-PLAN-007
+  title: Cut steps by outcome, not by role
+  text: >-
+    Cut work into steps that each end in something the director or a test can see. One agent does
+    the whole step in one context: the requirement, the code and its tests. Add no step whose only
+    output is a document for the next agent. When a plan drops or replaces a feature, its first
+    step removes the code and tests that become dead.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  sources:
+    - pool P151
+    - pool P157
+    - https://www.anthropic.com/engineering/multi-agent-research-system
+    - https://cognition.ai/blog/dont-build-multi-agents
+    - "fog_of_war process audit, 2026-11-12 (its PROGRESS.md, Decisions; commit a1f9660)"
+  evidence: >-
+    One project, measured over three versions: 359 steps of which 71 wrote code or tests; 630 of
+    791 commits changed no code; 54,400 lines of process documents for 11,500 lines of app code.
+    One change of 93 app lines took 6 role steps, each with a review round, and 1,178 lines of
+    paper. The director judged the quality good and the output slow. Not yet seen in a second project.
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-TEAM-004
+  title: One review round, and resume the agent that wrote the step
+  text: >-
+    A step gets one review round. Give the findings to the agent that wrote the step by resuming
+    it, not by starting a new one. Open a second round only for a blocking finding. Call the
+    planning role at the plan, at the close and when the director changes the scope, not after a
+    count of steps.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  sources:
+    - pool P152
+    - pool P153
+    - pool P154
+    - https://cognition.ai/blog/dont-build-multi-agents
+    - "fog_of_war process audit, 2026-11-12 (its PROGRESS.md, Decisions; commit a1f9660)"
+  evidence: >-
+    One project: every role step had its own review round, fixes went to agents started cold, and
+    the planner ran after every six steps. A change of 93 app lines took 5 review rounds in one
+    day. Not yet seen in a second project.
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director
+
+- id: R-VER-007
+  title: Tests assert behavior, and leave with the code they cover
+  text: >-
+    A test calls the code's public functions and asserts what they do. It never reads source text
+    to assert how the code is written; a rule about structure is a lint rule or a static check.
+    Delete a test only in the commit that deletes the code or the requirement it covers, and name
+    the test in the commit message. Time the suite before splitting it into tiers.
+  scope: [all-projects]
+  enforcement: rule-file
+  where: templates/project/AGENTS.md
+  sources:
+    - pool P155
+    - pool P156
+    - pool P157
+    - "fog_of_war process audit, 2026-11-12 (its PROGRESS.md, Decisions; commit a1f9660)"
+  evidence: >-
+    One project: 20 of 75 test files read source text, ahead of a rewrite of the module they
+    pinned; R-VER-004 gave no way to remove the tests of a removed feature; the director asked for
+    test tiers to save time when the whole check, 940 tests, ran in 17 seconds. Not yet seen in a
+    second project.
+  checked_on:
+  checked_at:
+  review_by: 2027-01-31
+  status: proposed
+  owner: director

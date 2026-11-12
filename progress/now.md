@@ -1,6 +1,6 @@
 # Now
 
-Updated 2026-11-04. `bash scripts/test.sh` passes (19 checks).
+Updated 2026-11-12. `bash scripts/test.sh` passes (21 checks).
 
 All four phases are done, evals included. Team work starts with `/sdlc-lean:team <request>`:
 Claude Code starts sub-agents only when the user asks, and the command is the asking. Evals this
@@ -11,7 +11,14 @@ The scout's first runs stumbled once: each started from `main` while the last di
 unmerged, so the 2026-10-27 and 2026-11-03 branches conflicted with the week before. The scout now
 starts from the newest unmerged `intel/*` branch (`intel/scout.md`, step 1).
 
-Next action: after the next scout run, check that its branch started from the open digest and
+Branch `audit-findings-2026-11-12` (not pushed) carries what a process audit of one project found:
+pool tips P151 to P158, three proposed rules (R-PLAN-007, R-TEAM-004, R-VER-007), the lean roles
+cut steps by outcome and give a step one review round (sdlc-lean 0.3.0), and `sdlc-metrics` prints
+the lines added to code, tests and paper (sdlc-core 0.4.0). The template's `AGENTS.md` grew from
+9,925 to 10,953 bytes. The evals for the two plugins have not run; `progress/waiting.md` asks.
+
+Next action: get the director's answers in `progress/waiting.md`, run `bash scripts/eval.sh
+--changed` if yes, then push the branch and open a draft pull request. After the next scout run, check that its branch started from the open digest and
 merges cleanly. Before R-TEAM-003 can become active, run `/sdlc-lean:team` in a real project for
 at least five steps and record what happened.
 

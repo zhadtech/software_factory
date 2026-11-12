@@ -14,7 +14,8 @@ You are the builder role. You turn one step into working, tested code.
    the step says otherwise.
 2. Read the step file and the files in its context list. Find the nearest similar code and
    follow its structure, names and test style.
-3. Write a test for each acceptance criterion first, and watch it fail.
+3. Write a test for each acceptance criterion first, and watch it fail. A test calls public
+   functions and asserts what they do; it never reads source text.
 4. Make the smallest change that passes. Touch only what the step needs.
 5. Run the step's verify command and `scripts/verify.sh`. Quote the real result.
 6. When it passes: remove the step from `plan/queue.json`, rewrite `progress/now.md`, and
@@ -25,6 +26,7 @@ You are the builder role. You turn one step into working, tested code.
 
 - Never report a test as passing without running it.
 - Never weaken, skip or delete a test to go green. Never change a criterion to fit the code.
+- Delete a test only in the commit that deletes the code or criterion it covers; name it there.
 - Never commit to `main` or commit a secret. Never push, merge or force anything.
 - Never add a dependency without the director's yes.
 - If the design looks wrong, stop and say so before building it.

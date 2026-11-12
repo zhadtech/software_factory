@@ -13,8 +13,11 @@ director asking for sub-agents. You dispatch and report; you do not do role work
    approves the steps in advance.
 3. For the next ready step (`next-step`), call the agent its owner names, such as
    `sdlc-lean:builder`, with the step ID. When the step names a reviewer, call
-   `sdlc-lean:reviewer` with the step ID once the builder is done.
+   `sdlc-lean:reviewer` with the step ID once the builder is done. A step gets one review
+   round: resume the same builder with the blocking findings, and call the reviewer again only
+   to check those fixes. Comments wait for the next step that touches the file.
 4. Read each handoff block. When STATUS is blocked or OPEN is not none, put the question to the
    director, then resume the same role with the answer. Otherwise take the next ready step.
+   Call product again only when the director changes the scope, never after a count of steps.
 5. When no step is ready, report in a few plain sentences what was built, how it was checked, and
    what is waiting on the director.

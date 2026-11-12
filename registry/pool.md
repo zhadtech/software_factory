@@ -196,9 +196,10 @@ its line. Sources at the bottom. Moved here from agi-standards `PLAYBOOK.md` on 
 
 ---
 
-## 13. From the scout
+## 13. From the scout and from project audits
 
-Tips the weekly scout (`intel/scout.md`) found in official sources. Each names its source.
+Tips the weekly scout (`intel/scout.md`) found in official sources, and tips from audits of real
+projects. Each names its source.
 
 146. Make a guard hook fail closed with `onFailure: "block"`, so a guard that crashes or times out blocks the action instead of letting it through. Needs Claude Code 2.1.295 or later on every machine. Source: the Claude Code changelog, 2.1.295.
 
@@ -209,6 +210,22 @@ Tips the weekly scout (`intel/scout.md`) found in official sources. Each names i
 149. In a project's settings.json, set `permissions.blockWritesOutsideWorkingDirectories` to true, so Write, Edit and NotebookEdit refuse any path outside the project in every permission mode. Needs Claude Code 2.1.314 or later. Source: the Claude Code changelog, 2.1.314.
 
 150. Know that a PreToolUse hook matching Bash now also runs on shell commands started by the Monitor tool, where it can block or ask but not approve or rewrite; write hook `if` conditions as `Monitor(tail *)` to target them. Source: the Claude Code changelog, 2.1.314.
+
+151. Cut work by outcome, not by role. A step ends in something a person or a test can see, and one agent does all of it in one context: the requirement, the code and its tests. A relay of roles, each started cold and each writing a document for the next, spends most of its tokens on the documents. Sources: the fog_of_war process audit, 2026-11-12 (359 steps, of which 71 wrote code or tests; 630 of 791 commits changed no code; one 93-line change took 6 role steps and 5 review rounds); https://www.anthropic.com/engineering/multi-agent-research-system; https://cognition.ai/blog/dont-build-multi-agents.
+
+152. Use sub-agents to read and to review, and one agent to write. Give review findings to the agent that wrote the step by resuming it; a cold agent has to learn the step again and misses the decisions already made. Sources: https://cognition.ai/blog/dont-build-multi-agents; https://cognition.com/blog/multi-agents-working; the fog_of_war process audit, 2026-11-12.
+
+153. Give a step one review round. Open a second round only for a blocking finding; a comment waits for the next step that touches the file. Source: the fog_of_war process audit, 2026-11-12 (every role step had its own review round, and the quality came from the first one).
+
+154. Run the planner at the plan, at the close and when the scope changes, not after a count of steps. Plan a version in one round and put every question to the director in one batch. Source: the fog_of_war process audit, 2026-11-12.
+
+155. Time the test suite before you split it into tiers. When the whole check runs in seconds, tiers save nothing; the cost of tests is then the tokens to write and keep them, so watch test lines per code line instead. Source: the fog_of_war process audit, 2026-11-12 (940 tests ran in 13 seconds; 23,700 test lines stood beside 11,500 lines of app code).
+
+156. A test calls the code's public functions and asserts what they do. A test that reads source text to assert how the code is written breaks on every rewrite; put a rule about structure in a lint rule or a static check. Source: the fog_of_war process audit, 2026-11-12 (20 of 75 test files read source text, ahead of a planned rewrite of the module they pinned).
+
+157. Delete a test only in the commit that deletes the code or the requirement it covers, and name the test in the commit message. When a plan drops or replaces a feature, make its first step remove the code and tests that become dead; before that step, prune nothing. Source: the fog_of_war process audit, 2026-11-12 (no code was unused while the old feature shipped; about a fifth of the code and tests became dead at the next version).
+
+158. Measure where the work goes: lines added to code, to tests and to paper, and the share of commits that change no code. Paper that outgrows code is the early sign that the team writes for itself. `sdlc-metrics` prints both. Source: the fog_of_war process audit, 2026-11-12 (54,400 lines of process documents for 11,500 lines of app code).
 
 ## Sources
 

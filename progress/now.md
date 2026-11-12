@@ -15,10 +15,11 @@ Branch `audit-findings-2026-11-12` (not pushed) carries what a process audit of 
 pool tips P151 to P158, three proposed rules (R-PLAN-007, R-TEAM-004, R-VER-007), the lean roles
 cut steps by outcome and give a step one review round (sdlc-lean 0.3.0), and `sdlc-metrics` prints
 the lines added to code, tests and paper (sdlc-core 0.4.0). The template's `AGENTS.md` grew from
-9,925 to 10,953 bytes. The evals for the two plugins have not run; `progress/waiting.md` asks.
+9,925 to 10,953 bytes. Its evals ran on 2026-11-12 ($0.99; `evals/results.md`): the team command
+passed 3 of 3, and the core-role-dispatch case failed 0 of 3 on a pass condition that is out of date.
 
-Next action: get the director's answers in `progress/waiting.md`, run `bash scripts/eval.sh
---changed` if yes, then push the branch and open a draft pull request. After the next scout run, check that its branch started from the open digest and
+Next action: the director reviews the draft pull request and answers `progress/waiting.md`. Then
+give core-role-dispatch a pass condition that fits the template. After the next scout run, check that its branch started from the open digest and
 merges cleanly. Before R-TEAM-003 can become active, run `/sdlc-lean:team` in a real project for
 at least five steps and record what happened.
 

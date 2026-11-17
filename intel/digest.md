@@ -3,6 +3,14 @@
 What the weekly scout found, newest week first. Each week links to its inbox file and its pull
 request. The scout keeps the twelve newest weeks. Written by `intel/scout.md`.
 
+## Week of 2026-11-17
+
+Claude Code moved from 2.1.322 to 2.1.326, and the platform notes brought no new model or retirement. Version 2.1.323 is the one that matters: it closed more gaps in deny rules and Bash permission checks, so the next audit should test the main-branch guard and the template's deny rules against them and confirm every machine is current. It also made scheduled tasks ask before running a skill that has hooks, which could stall the scout and the audit unless the skill is allowed, and it let a plugin state which Claude Code versions it needs. The engineering blog's 2026-11-06 memory post was read from its index summary only, and the 2026-11-13 safety-evaluation post has no summary there.
+
+- Added pool tips P160 (`engines["claude-code"]` in plugin.json) and P161 (`Skill(name)` allow rule for unattended scheduled runs).
+- Flagged for the next audit: `.claude/hooks/guard-main.sh` and the template's deny rules against the 2.1.323 permission fixes.
+- Inbox: `intel/inbox/2026-11-17.md`.
+
 ## Week of 2026-11-10
 
 Anthropic released Claude Fable 5.2 on 2026-11-09 and Claude Mythos 5.2 for verified organizations; Claude Code moved from 2.1.317 to 2.1.322 and made Fable 5.2 its default Fable model. The lean roles use the `opus` and `sonnet` aliases, so nothing changes for them, but a new model is a reason to recheck the rules at the next audit. Claude Code 2.1.319 and 2.1.321 fixed several ways a Bash command could slip past permission checks, so the next audit should test the main-branch guard against them and confirm every machine is current. A new setting, `permissions.denyInsteadOfPrompting`, would let unattended runs fail fast instead of waiting on a prompt. The engineering blog has a 2026-11-06 post on agent memory that could not be read this run.

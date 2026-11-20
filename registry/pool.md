@@ -229,6 +229,10 @@ projects. Each names its source.
 
 159. Measure where the work goes: lines added to code, to tests and to paper, and the share of commits that change no code. Paper that outgrows code is the early sign that the team writes for itself. `sdlc-metrics` prints both. Source: the fog_of_war process audit, 2026-11-12 (54,400 lines of process documents for 11,500 lines of app code).
 
+160. In a plugin's `.claude-plugin/plugin.json`, consider an `engines["claude-code"]` range, so a machine on an older Claude Code does not install, update or load a plugin that needs newer hooks or settings, and update picks the newest version that fits. Needs Claude Code 2.1.323 or later to take effect. Source: the Claude Code changelog, 2.1.323.
+
+161. Know that scheduled tasks and `/loop` now ask before running a skill that declares `allowed-tools` or hooks; for an unattended run, add `Skill(name)` to `permissions.allow` in the project's settings.json. Source: the Claude Code changelog, 2.1.323.
+
 ## Sources
 
 - [AGENTS.md Spec (2026): Recommended Sections + AGENTS.md vs CLAUDE.md vs .cursorrules](https://www.morphllm.com/agents-md-guide)

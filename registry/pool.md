@@ -233,6 +233,10 @@ projects. Each names its source.
 
 161. Know that scheduled tasks and `/loop` now ask before running a skill that declares `allowed-tools` or hooks; for an unattended run, add `Skill(name)` to `permissions.allow` in the project's settings.json. Source: the Claude Code changelog, 2.1.323.
 
+162. A `PreToolUse` guard that errors no longer refuses a Code Mode script's tool call, as it already did not outside Code Mode; give every guard hook `"onFailure": "block"` so a crashing guard still stops the call (see P146). Source: the Claude Code changelog, 2.1.329.
+
+163. In a plugin's `.claude-plugin/plugin.json`, use `optionalDependencies` for a plugin that should install beside this one but can be disabled or uninstalled on its own, such as stack rules beside a role pack. Source: the Claude Code changelog, 2.1.331.
+
 ## Sources
 
 - [AGENTS.md Spec (2026): Recommended Sections + AGENTS.md vs CLAUDE.md vs .cursorrules](https://www.morphllm.com/agents-md-guide)

@@ -3,6 +3,14 @@
 What the weekly scout found, newest week first. Each week links to its inbox file and its pull
 request. The scout keeps the twelve newest weeks. Written by `intel/scout.md`.
 
+## Week of 2026-11-24
+
+Claude Code moved from 2.1.326 to 2.1.331, and the platform notes brought no new model; Claude Opus 4.5 is deprecated, with retirement on 2027-01-22, but no factory file pins it. The change that matters for the guards is that in Code Mode a `PreToolUse` hook that errors no longer refuses the call unless it sets `"onFailure": "block"`, so the factory's guard hooks should carry that setting on every machine. Version 2.1.331 also fixed Stop and SubagentStop hooks missing the last reply, so the next audit should check the handoff check, and it added `optionalDependencies` to plugin manifests. Managed marketplaces will auto-update by default from 2026-11-30, which does not affect the template. The engineering blog's 2026-11-13 safety-evaluation post still has no summary and was not opened.
+
+- Added pool tips P162 (`onFailure: "block"` for guard hooks in Code Mode) and P163 (`optionalDependencies` in plugin manifests).
+- Flagged for the next audit: the handoff check in plugins/sdlc-core (`check-handoff.sh`) against the SubagentStop transcript fix.
+- Inbox: `intel/inbox/2026-11-24.md`.
+
 ## Week of 2026-11-17
 
 Claude Code moved from 2.1.322 to 2.1.326, and the platform notes brought no new model or retirement. Version 2.1.323 is the one that matters: it closed more gaps in deny rules and Bash permission checks, so the next audit should test the main-branch guard and the template's deny rules against them and confirm every machine is current. It also made scheduled tasks ask before running a skill that has hooks, which could stall the scout and the audit unless the skill is allowed, and it let a plugin state which Claude Code versions it needs. The engineering blog's 2026-11-06 memory post was read from its index summary only, and the 2026-11-13 safety-evaluation post has no summary there.
